@@ -1,4 +1,4 @@
-package org.example.to_dolist;
+package org.example.to_dolist.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
