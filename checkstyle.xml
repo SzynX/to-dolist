@@ -1,15 +1,56 @@
 <?xml version="1.0"?>
-<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
 <module name="Checker">
+    <!-- File level checks -->
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="error"/>
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <!-- Checks for maximum line length -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
+
+
+    <!-- All Java AST specific checks -->
     <module name="TreeWalker">
-        <module name="WhitespaceAround"/>
+        <!-- Code style checks -->
         <module name="MethodLength">
             <property name="max" value="50"/>
         </module>
+
+        <!-- Whitespace checks -->
+        <module name="WhitespaceAround">
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLoops" value="true"/>
+            <property name="allowEmptyLambdas" value="true"/>
+            <property name="allowEmptyCatches" value="true"/>
+        </module>
+        <module name="WhitespaceAfter"/>
+
+        <!-- Naming conventions -->
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="TypeName"/>
+
+        <!-- Imports -->
+        <module name="AvoidStarImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- Common coding problems -->
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+        </module>
+        <module name="NeedBraces"/>
+        <module name="LeftCurly"/>
+        <module name="RightCurly"/>
     </module>
-    <module name="LineLength">
-        <property name="max" value="120"/>
-    </module>
-    <module name="FileTabCharacter"/>
 </module>
