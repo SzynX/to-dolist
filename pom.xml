@@ -160,19 +160,29 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.2.0</version> <executions>
-				<execution>
-					<id>validate</id>
-					<phase>validate</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
-				</execution>
-			</executions>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>validate</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
 					<consoleOutput>false</consoleOutput>
 					<failsOnError>false</failsOnError>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -1,4 +1,4 @@
-package org.example.to_dolist.controller; // Figyelj, hogy a csomagnév helyes legyen!
+package org.example.to_dolist.controller; // Ne felejtsd el, hogy a csomagnév helyes legyen!
 
 import org.example.to_dolist.model.TodoItem;
 import org.example.to_dolist.service.TodoItemService;

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create or Edit Todo</title>
+</head>
+<body>
+<h1>Create or Edit Todo</h1>
+<form th:action="@{${todoItem.id == null} ? '/todos' : '/todos/' + ${todoItem.id}}" method="post">
+    <label for="task">Task</label>
+    <input type="text" id="task" name="task" th:value="${todoItem.task}" required>
+
+    <label for="completed">Completed</label>
+    <input type="checkbox" id="completed" name="completed" th:checked="${todoItem.completed}">
+
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
