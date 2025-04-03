@@ -1,28 +1,50 @@
-package org.example.to_dolist.model; // Ellenőrizd a csomagnevet!
+package org.example.to_dolist.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-@Entity // Jelzi, hogy ez egy adatbázis táblának megfelelő entitás
-@Data   // Lombok: getterek, setterek, toString, equals, hashCode generálása
-@NoArgsConstructor // Lombok: Üres konstruktor (JPA-nak kell)
-@AllArgsConstructor // Lombok: Minden mezős konstruktor
+@Entity
 public class TodoItem {
 
-    @Id // Ez az elsődleges kulcs
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatikusan növekvő ID (adatbázis generálja)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String task; // A teendő leírása
+    private String task;
+    private boolean completed;
 
-    private boolean completed = false; // Alapértelmezetten nincs kész
+    // Konstruktőrök
+    public TodoItem() {}
 
-    // Ide később vehetsz fel új mezőket, pl.:
-    // private java.time.LocalDate dueDate;
-    // private int priority;
+    public TodoItem(String task, boolean completed) {
+        this.task = task;
+        this.completed = completed;
+    }
+
+    // Getterek és setterek
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTask() {
+        return task;
+    }
+
+    public void setTask(String task) {
+        this.task = task;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
 }

@@ -1,29 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
 </head>
 <body>
 <h1>Todo List</h1>
-<a href="/todos/new">Add New Todo</a>
-<table>
-    <thead>
-    <tr>
-        <th>Task</th>
-        <th>Completed</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="todo : ${todos}">
-        <td th:text="${todo.task}">Task</td>
-        <td th:text="${todo.completed ? 'Completed' : 'Not Completed'}">Completed</td>
-        <td>
-            <a th:href="@{/todos/{id}/edit(id=${todo.id})}">Edit</a>
-            <a th:href="@{/todos/{id}/delete(id=${todo.id})}">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<ul>
+    <li th:each="todo : ${todos}">
+        <span th:text="${todo.name}"></span> -
+        <span th:text="${todo.completed ? 'Completed' : 'Pending'}"></span>
+        <a href="/todos/delete/{todo.id}">Delete</a>
+    </li>
+</ul>
+<a href="/">Back to Home</a>
 </body>
 </html>
