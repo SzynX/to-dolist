@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Learn Spring Boot",
+    "completed": false
+  },
+  {
+    "id": 2,
+    "name": "Build Todo App",
+    "completed": true
+  },
+  {
+    "id": 3,
+    "name": "Test the API with Postman",
+    "completed": false
+  }
+]
