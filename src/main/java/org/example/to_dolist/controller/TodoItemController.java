@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
@@ -40,26 +39,25 @@ public class TodoItemController {
             TodoItem createdTodo = todoItemService.createTodo(todoItem);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdTodo);
         } catch (IllegalArgumentException e) {
-            // Specifikus hiba kezelése
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TodoItem> updateTodo(@PathVariable Long id, @RequestBody TodoItem todoDetails) {
-        Optional<TodoItem> updatedTodo = todoItemService.updateTodo(id, todoDetails);
-        return updatedTodo.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        try {
+            TodoItem updatedTodo = todoItemService.updateTodo(id, todoDetails);
+            return ResponseEntity.ok(updatedTodo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
-        try {
-            todoItemService.deleteTodo(id);
+        if (todoItemService.deleteTodo(id)) {
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

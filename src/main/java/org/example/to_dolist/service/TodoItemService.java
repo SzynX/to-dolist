@@ -38,9 +38,10 @@ public class TodoItemService {
         return todoItemRepository.save(todoItem);
     }
 
-    public void deleteTodo(Long id) {
+    public boolean deleteTodo(Long id) {
         TodoItem todoItem = todoItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Todo not found"));
         todoItemRepository.delete(todoItem);
+        return false;
     }
 }
