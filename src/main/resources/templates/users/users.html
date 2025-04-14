@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users List</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Users and Their Tasks</h1>
+    </header>
+
+    <main>
+        <a href="/users/new" class="btn">Create New User</a>
+
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Tasks</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}">1</td>
+                <td th:text="${user.name}">John Doe</td>
+                <td>
+                    <ul>
+                        <li th:each="task : ${user.tasks}" th:text="${task.title}">Sample Task</li>
+                    </ul>
+                </td>
+                <td>
+                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn-edit">Edit</a>
+                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-delete">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="/" class="btn">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 To-Do Application</p>
+    </footer>
+</div>
+</body>
+</html>

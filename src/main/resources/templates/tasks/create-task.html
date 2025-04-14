@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Task</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Create New Task</h1>
+    </header>
+
+    <main>
+        <form th:action="@{/tasks}" th:object="${task}" method="post">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" th:field="*{title}" placeholder="Task Title" required /><br/>
+
+            <label for="dueDate">Due Date:</label>
+            <input type="date" id="dueDate" name="dueDate" th:field="*{dueDate}" required /><br/>
+
+            <label for="status">Status:</label>
+            <select id="status" name="status" th:field="*{status}" required>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="PENDING">Pending</option>
+            </select><br/>
+
+            <button type="submit" class="btn">Save</button>
+        </form>
+        <a href="/tasks" class="btn">Cancel</a> <!-- Cancel Button -->
+    </main>
+</div>
+</body>
+</html>

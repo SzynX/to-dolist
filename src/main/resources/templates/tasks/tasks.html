@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tasks List</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Tasks and Their Details</h1>
+    </header>
+
+    <main>
+        <a href="/tasks/new" class="btn">Create New Task</a> <!-- Button for Creating a New Task -->
+
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Due Date</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Loop through tasks -->
+            <tr th:each="task : ${tasks}">
+                <td th:text="${task.id}">1</td>
+                <td th:text="${task.title}">Task 1</td>
+                <td th:text="${task.status}">In Progress</td>
+                <td th:text="${task.dueDate}">2023-12-01</td>
+                <td>
+                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">Edit</a> <!-- Edit Button -->
+                    <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn-delete">Delete</button> <!-- Delete Button -->
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a href="/" class="btn">Back to Home</a> <!-- Back to Home Button -->
+    </main>
+
+    <footer>
+        <p>&copy; 2023 To-Do List Application</p>
+    </footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,154 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.container {
+    max-width: 960px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    color: #4CAF50;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #4CAF50;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+/* Table Styling */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.styled-table thead tr {
+    background-color: #4CAF50;
+    color: #ffffff;
+    text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.styled-table tbody tr {
+    background-color: #f8f8f8;
+}
+
+.styled-table tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+/* Delete Buttons */
+.btn-delete {
+    background-color: #e74c3c;
+    border: none;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* Specific to Todo List */
+.todo-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.todo-table thead tr {
+    background-color: #4CAF50;
+    color: #ffffff;
+    text-align: left;
+}
+
+.todo-table th,
+.todo-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+
+.todo-table tbody tr {
+    background-color: #f8f8f8;
+}
+
+.todo-table tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.todo-table tbody tr:hover {
+    background-color: #e9e9e9;
+}
+
+/* Form Styles for Creating and Editing Todos */
+.todo-form input,
+.todo-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.todo-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.todo-form button:hover {
+    background-color: #45a049;
+}
+
+/* Add custom styles for editing task status */
+.completed {
+    background-color: #27ae60;
+    color: white;
+}
+
+.incomplete {
+    background-color: #e67e22;
+    color: white;
+}
