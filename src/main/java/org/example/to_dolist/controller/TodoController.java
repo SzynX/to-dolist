@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/todos")
+@RequestMapping("/todos") // Ha szükséges, ezt módosíthatod a /tasks-ra is
 public class TodoController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class TodoController {
     @Autowired
     private UserService userService;
 
-    // GET: List all todos
+    // GET: List all todos (ez most a /todos/list)
     @GetMapping("/list")
     public String getAllTodos(Model model) {
         List<Todo> todos = todoService.getAllTodos();
@@ -34,7 +34,7 @@ public class TodoController {
     public String createTodoForm(Model model) {
         model.addAttribute("todo", new Todo());
         model.addAttribute("users", userService.getAllUsers());
-        return "todos/create-todo";
+        return "todos/create-todo"; // Template for creating a new Todo
     }
 
     // POST: Save New Todo
@@ -50,7 +50,7 @@ public class TodoController {
         Todo todo = todoService.findById(id);
         model.addAttribute("todo", todo);
         model.addAttribute("users", userService.getAllUsers());
-        return "todos/edit-todo";
+        return "todos/edit-todo"; // Edit page for Todo
     }
 
     // POST: Update Existing Todo
@@ -65,5 +65,14 @@ public class TodoController {
     public String deleteTodo(@PathVariable UUID id) {
         todoService.deleteById(id);
         return "redirect:/todos/list";
+    }
+
+    // -----------------------------------------
+    // NEW: GET: Show Task List Page (for /tasks URL)
+    @GetMapping("/tasks") // For /tasks list
+    public String getAllTasks(Model model) {
+        List<Todo> tasks = todoService.getAllTodos(); // Assuming tasks and todos are same
+        model.addAttribute("tasks", tasks);
+        return "tasks/tasks"; // This should correspond to a Thymeleaf template tasks/tasks.html
     }
 }

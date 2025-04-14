@@ -1,10 +1,10 @@
-package com.example.todolist.service;
+package org.example.to_dolist.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-import com.example.todolist.domain.User;
-import com.example.todolist.repository.UserRepository;
+import org.example.to_dolist.domain.User;
+import org.example.to_dolist.repository.UserRepository;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class UserServiceTest {
     private UserRepository userRepositoryMock;
 
     @InjectMocks
-    private UserService underTest;
+    private UserService userService;
 
     @Test
     void getAllUsers() {
@@ -37,7 +37,7 @@ public class UserServiceTest {
 
         when(userRepositoryMock.findAll()).thenReturn(expectedUsers);
 
-        List<User> result = underTest.getAllUsers();
+        List<User> result = userService.getAllUsers();
 
         assertEquals(expectedUsers, result);
     }
@@ -51,7 +51,7 @@ public class UserServiceTest {
 
         when(userRepositoryMock.save(expectedUser)).thenReturn(expectedUser);
 
-        User result = underTest.save(expectedUser);
+        User result = userService.save(expectedUser);
 
         assertEquals(expectedUser, result);
     }
@@ -65,7 +65,7 @@ public class UserServiceTest {
 
         when(userRepositoryMock.save(updatedUser)).thenReturn(updatedUser);
 
-        User result = underTest.save(updatedUser);
+        User result = userService.save(updatedUser);
 
         assertEquals(updatedUser, result);
     }
