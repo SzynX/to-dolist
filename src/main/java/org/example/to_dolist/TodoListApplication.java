@@ -1,12 +1,12 @@
-package org.example.to_dolist.todolist;
+package org.example.to_dolist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TodolistApplication {
+public class TodoListApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TodolistApplication.class, args);
+		SpringApplication.run(TodoListApplication.class, args);
 	}
 }
