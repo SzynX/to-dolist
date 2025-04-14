@@ -5,16 +5,10 @@ import org.example.to_dolist.service.TodoItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
@@ -28,31 +22,36 @@ public class TodoItemController {
     }
 
     @GetMapping
-    public List<TodoItem> getAllTodos() {
-        return todoItemService.getAllTodos();
+    public ResponseEntity<List<TodoItem>> getAllTodos() {
+        List<TodoItem> todos = todoItemService.getAllTodos();
+        return ResponseEntity.ok(todos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TodoItem> getTodoById(@PathVariable Long id) {
         return todoItemService.getTodoById(id)
-                .map(todoItem -> ResponseEntity.ok(todoItem))
-                .orElse(ResponseEntity.notFound().build());
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
     public ResponseEntity<TodoItem> createTodo(@RequestBody TodoItem todoItem) {
-        TodoItem createdTodo = todoItemService.createTodo(todoItem);
-        return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
+        try {
+            TodoItem createdTodo = todoItemService.createTodo(todoItem);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdTodo);
+        } catch (IllegalArgumentException e) {
+            // Specifikus hiba kezelése
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<TodoItem> updateTodo(@PathVariable Long id, @RequestBody TodoItem todoDetails) {
-        try {
-            TodoItem updatedTodo = todoItemService.updateTodo(id, todoDetails);
-            return ResponseEntity.ok(updatedTodo);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Optional<TodoItem> updatedTodo = todoItemService.updateTodo(id, todoDetails);
+        return updatedTodo.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @DeleteMapping("/{id}")
@@ -61,7 +60,7 @@ public class TodoItemController {
             todoItemService.deleteTodo(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
