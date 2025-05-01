@@ -9,7 +9,7 @@ import org.example.to_dolist.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.UUID;
 
 @Controller
@@ -35,21 +35,25 @@ public class TaskController {
     }
 
     @PostMapping
-    public String saveTask(@ModelAttribute Task task) {
-        if (task.getUser() != null && task.getUser().getId() != null) {
-            User user = userService.getUserById(task.getUser().getId());
-            task.setUser(user);
+    public String saveTask(
+            @ModelAttribute Task task,
+            @RequestParam("userId") UUID userId,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            User user = userService.getUserById(userId);
+            user.addTask(task); // Bidirekcionális kapcsolat frissítése
+            taskService.createTask(task);
+            redirectAttributes.addFlashAttribute("success", "Task created successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error creating task: " + e.getMessage());
         }
-        taskService.createTask(task);
         return "redirect:/tasks";
     }
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable UUID id, Model model) {
         Task task = taskService.getTaskById(id);
-        if (task.getUser() == null) {
-            task.setUser(new User());
-        }
         model.addAttribute("task", task);
         model.addAttribute("statuses", TaskStatus.values());
         model.addAttribute("users", userService.getAllUsers());
@@ -57,18 +61,33 @@ public class TaskController {
     }
 
     @PostMapping("/edit")
-    public String updateTask(@ModelAttribute Task task) {
-        if (task.getUser() != null && task.getUser().getId() != null) {
-            User user = userService.getUserById(task.getUser().getId());
+    public String updateTask(
+            @ModelAttribute Task task,
+            @RequestParam("userId") UUID userId,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            User user = userService.getUserById(userId);
             task.setUser(user);
+            taskService.updateTask(task);
+            redirectAttributes.addFlashAttribute("success", "Task updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error updating task: " + e.getMessage());
         }
-        taskService.updateTask(task);
         return "redirect:/tasks";
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable UUID id) {
-        taskService.deleteTask(id);
+    public String delete(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            taskService.deleteTask(id);
+            redirectAttributes.addFlashAttribute("success", "Task deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error deleting task: " + e.getMessage());
+        }
         return "redirect:/tasks";
     }
 }

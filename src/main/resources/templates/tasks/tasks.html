@@ -3,6 +3,12 @@
 <head>
     <title>Tasks List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
+        .alert-success { background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d; }
+        .alert-error { background-color: #f2dede; border-color: #ebccd1; color: #a94442; }
+        .no-tasks { padding: 20px; text-align: center; color: #666; }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -11,41 +17,50 @@
     </header>
 
     <main>
-        <a href="/tasks/new" class="btn">Create New Task</a> <!-- Button for Creating a New Task -->
+        <!-- Success/Error üzenetek -->
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Due Date</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- Loop through tasks -->
-            <tr th:each="task : ${tasks}">
-                <td th:text="${task.id}">1</td>
-                <td th:text="${task.title}">Task 1</td>
-                <td th:text="${task.status}">In Progress</td>
-                <td th:text="${task.dueDate}">2023-12-01</td>
-                <td>
-                    <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">Edit</a> <!-- Edit Button -->
-                    <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn-delete">Delete</button> <!-- Delete Button -->
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="action-buttons">
+            <a href="/tasks/new" class="btn">Create New Task</a>
+            <a href="/users" class="btn">Manage Users</a>
+        </div>
 
-        <a href="/" class="btn">Back to Home</a> <!-- Back to Home Button -->
+        <div class="task-list">
+            <table class="styled-table" th:if="${not #lists.isEmpty(tasks)}">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Assigned User</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasks}">
+                    <td th:text="${task.id}">1</td>
+                    <td th:text="${task.title}">Task 1</td>
+                    <td th:text="${task.user?.name} ?: 'Unassigned'">N/A</td>
+                    <td th:text="${task.status}">In Progress</td>
+                    <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2023-12-01</td>
+                    <td>
+                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">Edit</a>
+                        <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <!-- No tasks üzenet -->
+            <div th:if="${#lists.isEmpty(tasks)}" class="no-tasks">
+                <p>No tasks found. Create your first task!</p>
+            </div>
+        </div>
     </main>
-
-    <footer>
-        <p>&copy; 2023 To-Do List Application</p>
-    </footer>
 </div>
 </body>
 </html>

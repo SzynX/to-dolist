@@ -13,7 +13,10 @@
     <main>
         <form th:action="@{/users}" th:object="${user}" method="post">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" th:field="*{name}" placeholder="User Name" required /><br/>
+            <input type="text" id="name" th:field="*{name}" required /><br/>
+
+            <label for="dateOfBirth">Date of Birth:</label>
+            <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" /><br/>
 
             <button type="submit" class="btn">Save</button>
         </form>

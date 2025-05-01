@@ -12,6 +12,7 @@
 
     <main>
         <a href="/users/new" class="btn">Create New User</a>
+        <a href="/tasks" class="btn">View Tasks</a>
 
         <table class="styled-table">
             <thead>
@@ -27,9 +28,10 @@
                 <td th:text="${user.id}">1</td>
                 <td th:text="${user.name}">John Doe</td>
                 <td>
-                    <ul>
+                    <ul th:if="${not #lists.isEmpty(user.tasks)}">
                         <li th:each="task : ${user.tasks}" th:text="${task.title}">Sample Task</li>
                     </ul>
+                    <span th:if="${#lists.isEmpty(user.tasks)}">No tasks</span>
                 </td>
                 <td>
                     <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn-edit">Edit</a>
@@ -40,13 +42,7 @@
             </tr>
             </tbody>
         </table>
-
-        <a href="/" class="btn">Back to Home</a>
     </main>
-
-    <footer>
-        <p>&copy; 2025 To-Do Application</p>
-    </footer>
 </div>
 </body>
 </html>

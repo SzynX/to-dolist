@@ -11,29 +11,35 @@
     </header>
 
     <main>
-        <form th:action="@{/tasks/edit}" th:object="${task}" method="post">
-            <input type="hidden" th:field="*{id}" />
+        <form th:action="@{/tasks/edit}" method="post">
+            <input type="hidden" th:field="${task.id}" />
 
             <label for="title">Title:</label>
-            <input type="text" id="title" th:field="*{title}" placeholder="Task Title" required /><br/>
+            <input type="text" id="title" th:field="${task.title}" required /><br/>
 
             <label for="description">Description:</label>
-            <input type="text" id="description" th:field="*{description}" placeholder="Description" /><br/>
+            <input type="text" id="description" th:field="${task.description}" /><br/>
 
             <label for="dueDate">Due Date:</label>
-            <input type="date" id="dueDate" th:field="*{dueDate}" required /><br/>
+            <input type="date" id="dueDate" th:field="${task.dueDate}" required /><br/>
 
             <label for="status">Status:</label>
-            <select id="status" th:field="*{status}">
-                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status}"></option>
+            <select id="status" th:field="${task.status}">
+                <option th:each="status : ${statuses}"
+                        th:value="${status}"
+                        th:text="${status}"></option>
             </select><br/>
 
             <label for="completed">Completed:</label>
-            <input type="checkbox" id="completed" th:field="*{completed}" /><br/>
+            <input type="checkbox" id="completed" th:field="${task.completed}" /><br/>
 
+            <!-- Javított user select -->
             <label for="user">User:</label>
-            <select id="user" th:field="*{user.id}">
-                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+            <select id="user" name="userId">
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:selected="${task.user != null and user.id == task.user.id}"
+                        th:text="${user.name}"></option>
             </select><br/>
 
             <button type="submit" class="btn">Save</button>

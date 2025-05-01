@@ -2,7 +2,6 @@ package org.example.to_dolist.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -11,7 +10,7 @@ import java.util.UUID;
 public class Task {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     private String title;
@@ -23,7 +22,7 @@ public class Task {
 
     private boolean completed;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }

@@ -2,9 +2,10 @@ package org.example.to_dolist.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.to_dolist.domain.User;
+import org.example.to_dolist.exception.UserNotFoundException;
 import org.example.to_dolist.repository.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -14,24 +15,26 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     public User getUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+    }
+
+    public List<User> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        // Lazy inicializáció aktiválása
+        users.forEach(user -> Hibernate.initialize(user.getTasks()));
+        return users;
     }
 
     public User save(User user) {
         return userRepository.save(user);
     }
 
-    public User edit(User user) {
-        return userRepository.save(user);
-    }
-
     public void deleteById(UUID id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("Cannot delete. User not found with ID: " + id);
+        }
         userRepository.deleteById(id);
     }
 }
