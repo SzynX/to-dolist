@@ -42,7 +42,8 @@ public class UserController {
     // GET: Show Edit User Page
     @GetMapping("/edit/{id}")
     public String editUserForm(@PathVariable UUID id, Model model) {
-        User user = userService.findById(id);
+        // A UserService-ben a findById metódus átnevezésre/egyesítésre került getUserById néven
+        User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "users/edit-user";
     }
@@ -50,7 +51,9 @@ public class UserController {
     // POST: Update Existing User
     @PostMapping("/edit")
     public String updateUser(@ModelAttribute User user) {
-        userService.edit(user);
+        // A UserService-ben az edit metódus átnevezésre/egyesítésre került save néven
+        // A save metódus a JPA repository save metódusát hívja, ami ID alapján eldönti, hogy insert vagy update
+        userService.save(user);
         return "redirect:/users/list";
     }
 

@@ -1,16 +1,13 @@
 package org.example.to_dolist.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Task {
 
     @Id
@@ -18,9 +15,7 @@ public class Task {
     private UUID id;
 
     private String title;
-
     private String description;
-
     private LocalDate dueDate;
 
     @Enumerated(EnumType.STRING)
@@ -29,5 +24,6 @@ public class Task {
     private boolean completed;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 }

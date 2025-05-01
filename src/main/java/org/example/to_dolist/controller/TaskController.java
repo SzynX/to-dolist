@@ -3,6 +3,7 @@ package org.example.to_dolist.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.to_dolist.domain.Task;
 import org.example.to_dolist.domain.TaskStatus;
+import org.example.to_dolist.domain.User;
 import org.example.to_dolist.service.TaskService;
 import org.example.to_dolist.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -35,13 +36,21 @@ public class TaskController {
 
     @PostMapping
     public String saveTask(@ModelAttribute Task task) {
+        if (task.getUser() != null && task.getUser().getId() != null) {
+            User user = userService.getUserById(task.getUser().getId());
+            task.setUser(user);
+        }
         taskService.createTask(task);
         return "redirect:/tasks";
     }
 
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable UUID id, Model model) {
-        model.addAttribute("task", taskService.getTaskById(id));
+        Task task = taskService.getTaskById(id);
+        if (task.getUser() == null) {
+            task.setUser(new User());
+        }
+        model.addAttribute("task", task);
         model.addAttribute("statuses", TaskStatus.values());
         model.addAttribute("users", userService.getAllUsers());
         return "tasks/edit-task";
@@ -49,6 +58,10 @@ public class TaskController {
 
     @PostMapping("/edit")
     public String updateTask(@ModelAttribute Task task) {
+        if (task.getUser() != null && task.getUser().getId() != null) {
+            User user = userService.getUserById(task.getUser().getId());
+            task.setUser(user);
+        }
         taskService.updateTask(task);
         return "redirect:/tasks";
     }
