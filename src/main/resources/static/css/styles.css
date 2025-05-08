@@ -28,6 +28,10 @@
     --transition-speed-normal: 0.3s ease-in-out;
 
     --table-button-gap: 8px; /* Gap specifically for buttons in table cells */
+
+    /* ÚJ: Szín a completed feladatok szövegéhez */
+    --completed-text-color: #7F8C8D; /* Ugyanaz, mint light-text-color */
+    --completed-bg-color: #e9e9eb; /* Nagyon világos szürke */
 }
 
 /* --- Global Styles --- */
@@ -294,12 +298,10 @@ body.welcome-page .action-buttons {
 .btn-delete {
     background: var(--error-color); /* Red */
     color: white;
-    /* Removed specific delete button animation for uniformity */
 }
 
 .btn-delete:hover {
     background: #c0392b; /* Slightly darker red */
-    /* Removed pulsing animation on hover */
 }
 
 .btn-create {
@@ -350,6 +352,30 @@ body.welcome-page .action-buttons {
     font-weight: 700; /* Bolder header text */
 }
 
+/* Style for sortable table headers */
+.styled-table th.sortable {
+    cursor: pointer; /* Indicate that the header is clickable */
+}
+
+.styled-table th.sortable a {
+    color: inherit; /* Inherit color from th */
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Use flexbox to align text and icon */
+    align-items: center;
+    gap: 5px; /* Space between text and icon */
+}
+
+.styled-table th.sortable a:hover {
+    text-decoration: underline; /* Add underline on hover for clickability */
+}
+
+/* Style for sort indicator arrows (▲ / ▼) */
+.styled-table th.sortable a span {
+    font-size: 0.8em; /* Smaller arrow size */
+    color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+}
+
+
 .styled-table th,
 .styled-table td {
     padding: 12px 15px;
@@ -376,24 +402,52 @@ body.welcome-page .action-buttons {
     font-weight: 600;
 }
 
-/* --- NEW: Style for completed task rows --- */
+/* --- Style for completed task rows --- */
 .styled-table tbody tr.completed-task {
     text-decoration: line-through; /* Strikethrough text */
-    color: var(--light-text-color); /* Fade text color */
+    color: var(--completed-text-color); /* Fade text color using completed variable */
     opacity: 0.8; /* Slightly reduce opacity */
-    background-color: #e9e9eb; /* Light grey background */
+    background-color: var(--completed-bg-color); /* Light grey background using completed variable */
     transition: all var(--transition-speed-normal); /* Smooth transition */
 }
 
 /* Ensure specific elements within completed rows are NOT affected by strikethrough/fading */
+.styled-table tbody tr.completed-task td {
+    /* Ensure cell content is not faded *unless* it's the primary text */
+    /* This might require more specific targeting or adjusting the .completed-task rule */
+    /* A simpler approach is to apply strikethrough only to the title/description cells if they exist */
+    /* Let's try to target specific cells or children within the cell */
+    color: inherit; /* Revert to the faded row color by default */
+    text-decoration: none; /* Ensure no strikethrough on the cell itself */
+}
+
+/* Apply strikethrough specifically to the Task Title and Description cells if they existed */
+/* Assuming Task Title is in the 3rd column (index 2, if 0-indexed) */
+.styled-table tbody tr.completed-task td:nth-child(3) {
+    text-decoration: line-through;
+}
+/* If you had a description column, target it similarly */
+/* .styled-table tbody tr.completed-task td:nth-child(X) { text-decoration: line-through; } */
+
+
 .styled-table tbody tr.completed-task td .btn-edit,
 .styled-table tbody tr.completed-task td .btn-delete,
 .styled-table tbody tr.completed-task td form button,
-.styled-table tbody tr.completed-task td input[type="checkbox"] {
+.styled-table tbody tr.completed-task td input[type="checkbox"],
+.styled-table tbody tr.completed-task .status-PENDING, /* Ensure status colors/spans are not affected */
+.styled-table tbody tr.completed-task .status-IN_PROGRESS,
+.styled-table tbody tr.completed-task .status-COMPLETED,
+.styled-table tbody tr.completed-task .status-UNKNOWN,
+.styled-table tbody tr.completed-task .priority-LOW, /* Ensure priority colors/spans are not affected */
+.styled-table tbody tr.completed-task .priority-MEDIUM,
+.styled-table tbody tr.completed-task .priority-HIGH {
     text-decoration: none; /* Remove strikethrough */
     opacity: 1; /* Reset opacity */
-    color: inherit; /* Inherit original text color from button/element, not faded row */
+    color: inherit; /* Inherit color from their own specific rules (status/priority colors), not the faded row color */
+    /* If status/priority colors still look too faded, you might need to explicitly set their color back: */
+    /* color: var(--warning-color); etc. - but 'inherit' should work if their original rules have higher specificity */
 }
+
 
 /* Status and Priority Specific Styling */
 /* Using classes based on the enum names */
@@ -401,15 +455,6 @@ body.welcome-page .action-buttons {
 .status-IN_PROGRESS { color: var(--info-color); font-weight: 600; }
 .status-COMPLETED { color: var(--success-color); font-weight: 600; }
 .status-UNKNOWN { color: var(--secondary-color); font-style: italic; font-weight: normal;} /* Grey for unknown */
-
-/* Ensure Status/Priority text color is visible even on completed row background */
-.styled-table tbody tr.completed-task .status-PENDING,
-.styled-table tbody tr.completed-task .status-IN_PROGRESS,
-.styled-table tbody tr.completed-task .status-COMPLETED,
-.styled-table tbody tr.completed-task .status-UNKNOWN {
-    color: inherit; /* Use the faded row color */
-    /* Or explicitly set a color if needed, e.g., color: var(--text-color); */
-}
 
 
 .priority-LOW { color: var(--low-priority-color); font-weight: 600; }

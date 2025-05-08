@@ -3,7 +3,8 @@
 <head>
     <title>📋 Task List</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -17,123 +18,175 @@
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
         <div class="action-buttons">
-            <a href="/tasks/new" class="btn btn-create">➕ Create New Task</a> <a href="/users" class="btn btn-manage">👤 Manage Users</a> <a href="/tasks/due-warning" class="btn btn-warning">⚠️ Due Date Warnings</a> </div>
+            <a href="/tasks/new" class="btn btn-create">➕ Create New Task</a>
+            <a href="/users" class="btn btn-manage">👤 Manage Users</a>
+            <a href="/tasks/due-warning" class="btn btn-warning">⚠️ Due Date Warnings</a>
+        </div>
 
         <div class="task-list">
             <table class="styled-table" th:if="${tasks != null and not #lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>✅</th> <th>📌 Title</th>
-                    <th>👤 Assigned User</th>
-                    <th>📈 Status</th>
-                    <th>📅 Due Date</th>
-                    <th>⚡ Priority</th>
-                    <th>⚙️ Actions</th>
-                </tr>
+                    <th class="sortable"> <a th:href="@{/tasks(sortBy='id', sortDirection=${currentSortBy == 'id' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        ID
+                        <span th:if="${currentSortBy == 'id'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span> <span th:if="${currentSortDirection == 'desc'}">▼</span> </span>
+                    </a>
+                    </th>
+                    <th>✅</th> <th class="sortable">
+                    <a th:href="@{/tasks(sortBy='title', sortDirection=${currentSortBy == 'title' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        📌 Title
+                        <span th:if="${currentSortBy == 'title'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                            </span>
+                    </a>
+                </th>
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='user.name', sortDirection=${currentSortBy == 'user.name' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                            👤 Assigned User <span th:if="${currentSortBy == 'user.name'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                            </span>
+                        </a>
+                    </th>
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='status', sortDirection=${currentSortBy == 'status' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                            📈 Status
+                            <span th:if="${currentSortBy == 'status'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                            </span>
+                        </a>
+                    </th>
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='dueDate', sortDirection=${currentSortBy == 'dueDate' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                            📅 Due Date
+                            <span th:if="${currentSortBy == 'dueDate'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                            </span>
+                        </a>
+                    </th>
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='priority', sortDirection=${currentSortBy == 'priority' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                            ⚡ Priority
+                            <span th:if="${currentSortBy == 'priority'}">
+                                <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                            </span>
+                        </a>
+                    </th>
+                    <th>⚙️ Actions</th> </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}"
                     th:class="'task-row status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
                               ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'} +
-                              (${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) and !task.completed ? ' due-warning' : ''}) + (${task.completed ? ' completed-task' : ''})" > <td th:text="${task.id}">1</td>
+                              (${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) and !task.completed ? ' due-warning' : ''}) +
+                              (${task.completed ? ' completed-task' : ''})"
+                    th:data-task-id="${task.id}"> <td th:text="${task.id}">1</td>
                     <td> <input
                             type="checkbox"
                             th:checked="${task.completed}"
-                            th:data-task-id="${task.id}" class="task-completed-checkbox" />
+                            class="task-completed-checkbox"
+                    />
                     </td>
                     <td th:text="${task.title}">Task Title</td>
                     <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>
                     <td>
                         <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
-                            <span th:case="'PENDING'">📌 Pending</span>
-                            <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
-                            <span th:case="'COMPLETED'">✅ Completed</span>
-                            <span th:case="'UNKNOWN'">❓ Unknown</span>
+                            <span th:case="'PENDING'" class="status-PENDING">📌 Pending</span>
+                            <span th:case="'IN_PROGRESS'" class="status-IN_PROGRESS">⏳ In Progress</span>
+                            <span th:case="'COMPLETED'" class="status-COMPLETED">✅ Completed</span>
+                            <span th:case="'UNKNOWN'" class="status-UNKNOWN">❓ Unknown</span>
                         </span>
                     </td>
-                    <td th:text="${task.dueDate != null ? #temporals.format(task.dueDate, 'yyyy-MM-dd') : 'N/A'}">2025-05-10</td> <td>
+                    <td th:text="${task.dueDate != null ? #temporals.format(task.dueDate, 'yyyy-MM-dd') : 'N/A'}">2025-05-10</td>
+                    <td>
                         <span th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}"
-                              th:class="'priority-' + ${task.priority != null ? task.priority.name().toLowerCase() : 'unknown'}"> </span>
+                              th:class="'priority-' + ${task.priority != null ? task.priority.name().toLowerCase() : 'unknown'}">
+                        </span>
                     </td>
                     <td>
                         <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
                         <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
-                            <input type="hidden" name="_method" value="DELETE"/> <button type="submit" class="btn-delete">🗑️ Delete</button>
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button type="submit" class="btn-delete">🗑️ Delete</button>
                         </form>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <div th:if="${tasks == null or #lists.isEmpty(tasks)}" class="no-tasks"> <p>🛑 No tasks found. Create your first one!</p>
+            <div th:if="${tasks == null or #lists.isEmpty(tasks)}" class="no-tasks">
+                <p>🛑 No tasks found. Create your first one!</p>
             </div>
         </div>
     </main>
 
     <script>
-        // JavaScript a checkbox kattintások kezelésére
         document.addEventListener('DOMContentLoaded', function () {
-            // Megkeressük az összes checkboxot, aminek a 'task-completed-checkbox' osztálya van
             const checkboxes = document.querySelectorAll('.task-completed-checkbox');
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
-                    const taskId = this.dataset.taskId; // Lekérjük a feladat ID-t az adatattribútumból
-                    const isCompleted = this.checked; // Lekérjük a checkbox új állapotát
-                    const row = this.closest('.task-row'); // Megkeressük a legközelebbi sor elemet
+                    // A feladat ID-t most a sor elemből olvassuk ki
+                    const row = this.closest('.task-row');
+                    const taskId = row.dataset.taskId;
+                    const isCompleted = this.checked;
 
-                    // AJAX kérés küldése a szervernek
                     fetch(`/tasks/toggle-completed/${taskId}`, {
-                        method: 'POST', // POST kérés az endpointra
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            // Szükség lehet CSRF tokenre Spring Security esetén
-                            // Pl: 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
+                            // Spring Security CSRF token handling (uncomment if needed)
+                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
                         },
-                        // Body: opcionálisan elküldhetjük az új státuszt is, de a szerver oldalon egyszerűbb csak váltani
-                        // body: JSON.stringify({ completed: isCompleted })
                     })
                         .then(response => {
                             if (!response.ok) {
-                                // Hiba esetén visszagörgetjük a checkbox állapotát
-                                this.checked = !isCompleted;
-                                // Hibaüzenet megjelenítése (opcionális)
                                 console.error('Failed to toggle task completed status');
                                 alert('Failed to update task status.');
+                                this.checked = !isCompleted; // Revert checkbox state on error
                             } else {
-                                // Sikeres frissítés esetén vizuálisan frissítjük a sort
+                                // Update row class visually on success
                                 if (isCompleted) {
                                     row.classList.add('completed-task');
-                                    // Opcionálisan frissítheted a státusz cellát is "✅ Completed"-re
-                                    const statusCell = row.querySelector('td:nth-child(5)'); // Figyelj az oszlop számára
+                                    // Optional: Update Status text to '✅ Completed'
+                                    const statusCell = row.querySelector('td:nth-child(5) span'); // Select the span inside the 5th td
                                     if (statusCell) {
-                                        statusCell.innerHTML = '<span class="status-COMPLETED">✅ Completed</span>';
+                                        statusCell.className = 'status-COMPLETED'; // Update class
+                                        statusCell.textContent = '✅ Completed'; // Update text
                                     }
+                                    // Remove due-warning class if completed
+                                    row.classList.remove('due-warning');
+
                                 } else {
                                     row.classList.remove('completed-task');
-                                    // Opcionálisan frissítheted a státusz cellát is "📌 Pending"-re (vagy az eredetire)
-                                    const statusCell = row.querySelector('td:nth-child(5)'); // Figyelj az oszlop számára
-                                    if (statusCell) {
-                                        // Ez bonyolultabb lehet, ha vissza kell állítani az eredeti státuszt
-                                        // Egyszerűbb, ha csak a completed státuszra reagál a CSS
+                                    // Optional: Update Status text back (this requires knowing the original status, which is complex here)
+                                    // For simplicity, the status text might not revert perfectly without more data
+                                    // Or you could refetch the task row content, but that's heavier.
+                                    // A simple approach is to let the CSS handle the status text color based on the enum name class.
+                                    // The current switch statement in Thymeleaf already uses classes like status-PENDING etc.
+                                    // The CSS for completed-task overrides these colors, so removing completed-task class should bring back the original status color.
+                                    // We don't auto-add 'due-warning' back here, that will show on next page load if applicable.
+
+                                    // A status cell text update is tricky. Let's remove the specific text update logic
+                                    // and rely only on the status enum name class for coloring/styling.
+                                    const statusSpan = row.querySelector('td:nth-child(5) span');
+                                    if (statusSpan && statusSpan.classList.contains('status-COMPLETED')) {
+                                        // If it was completed, we can try to guess the original status
+                                        // but it's unreliable. Best to let page reload or more complex JS handle this.
+                                        // For now, we just remove the completed class and rely on CSS for other statuses.
                                     }
-                                }
-                                // Távolítsuk el a lejárat figyelmeztetés stílust, ha készen van
-                                if (isCompleted) {
-                                    row.classList.remove('due-warning');
-                                } else {
-                                    // Ha visszavonjuk a készenlétet, ellenőrizzük újra a határidő figyelmeztetést
-                                    // Ez a legegyszerűbben egy oldalfrissítéssel vagy egy külön JS függvénnyel történhet
-                                    // Most az egyszerűség kedvéért nem csinálunk itt semmit, a következő betöltéskor jó lesz
                                 }
                             }
                         })
                         .catch(error => {
                             console.error('Error:', error);
-                            // Hiba esetén visszagörgetjük a checkbox állapotát
-                            this.checked = !isCompleted;
                             alert('An error occurred while updating task status.');
+                            this.checked = !isCompleted; // Revert checkbox state on network error
                         });
                 });
             });
