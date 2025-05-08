@@ -3,6 +3,8 @@
 <head>
     <title>📋 Task List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
@@ -15,18 +17,14 @@
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
         <div class="action-buttons">
-            <a href="/tasks/new" class="btn btn-edit">➕ Create New Task</a>
-            <a href="/users" class="btn btn-edit">👤 Manage Users</a>
-            <!-- Új link hozzáadása a közelgő határidőkkel rendelkező feladatok listájához -->
-            <a href="/tasks/due-warning" class="btn btn-edit">⚠️ Due Date Warnings</a>
-        </div>
+            <a href="/tasks/new" class="btn btn-create">➕ Create New Task</a> <a href="/users" class="btn btn-manage">👤 Manage Users</a> <a href="/tasks/due-warning" class="btn btn-warning">⚠️ Due Date Warnings</a> </div>
 
         <div class="task-list">
             <table class="styled-table" th:if="${tasks != null and not #lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>📌 Title</th>
+                    <th>✅</th> <th>📌 Title</th>
                     <th>👤 Assigned User</th>
                     <th>📈 Status</th>
                     <th>📅 Due Date</th>
@@ -36,41 +34,112 @@
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}"
-                    th:class="'status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
+                    th:class="'task-row status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
                               ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'} +
-                              ${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) ? ' due-warning' : ''}">
-                    <td th:text="${task.id}">1</td>
+                              (${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) and !task.completed ? ' due-warning' : ''}) + (${task.completed ? ' completed-task' : ''})" > <td th:text="${task.id}">1</td>
+                    <td> <input
+                            type="checkbox"
+                            th:checked="${task.completed}"
+                            th:data-task-id="${task.id}" class="task-completed-checkbox" />
+                    </td>
                     <td th:text="${task.title}">Task Title</td>
                     <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>
                     <td>
-                            <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
-                                <span th:case="'PENDING'">📌 Pending</span>
-                                <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
-                                <span th:case="'COMPLETED'">✅ Completed</span>
-                                <span th:case="'UNKNOWN'">❓ Unknown</span>
-                            </span>
-                    </td>
-                    <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2025-05-10</td>
-                    <td>
-                        <span th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}">
-                            <!-- Priority Text Display -->
+                        <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
+                            <span th:case="'PENDING'">📌 Pending</span>
+                            <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
+                            <span th:case="'COMPLETED'">✅ Completed</span>
+                            <span th:case="'UNKNOWN'">❓ Unknown</span>
                         </span>
+                    </td>
+                    <td th:text="${task.dueDate != null ? #temporals.format(task.dueDate, 'yyyy-MM-dd') : 'N/A'}">2025-05-10</td> <td>
+                        <span th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}"
+                              th:class="'priority-' + ${task.priority != null ? task.priority.name().toLowerCase() : 'unknown'}"> </span>
                     </td>
                     <td>
                         <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
                         <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn-delete">🗑️ Delete</button>
+                            <input type="hidden" name="_method" value="DELETE"/> <button type="submit" class="btn-delete">🗑️ Delete</button>
                         </form>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <div th:if="${#lists.isEmpty(tasks)}" class="no-tasks">
-                <p>🛑 No tasks found. Create your first one!</p>
+            <div th:if="${tasks == null or #lists.isEmpty(tasks)}" class="no-tasks"> <p>🛑 No tasks found. Create your first one!</p>
             </div>
         </div>
     </main>
+
+    <script>
+        // JavaScript a checkbox kattintások kezelésére
+        document.addEventListener('DOMContentLoaded', function () {
+            // Megkeressük az összes checkboxot, aminek a 'task-completed-checkbox' osztálya van
+            const checkboxes = document.querySelectorAll('.task-completed-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const taskId = this.dataset.taskId; // Lekérjük a feladat ID-t az adatattribútumból
+                    const isCompleted = this.checked; // Lekérjük a checkbox új állapotát
+                    const row = this.closest('.task-row'); // Megkeressük a legközelebbi sor elemet
+
+                    // AJAX kérés küldése a szervernek
+                    fetch(`/tasks/toggle-completed/${taskId}`, {
+                        method: 'POST', // POST kérés az endpointra
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // Szükség lehet CSRF tokenre Spring Security esetén
+                            // Pl: 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
+                        },
+                        // Body: opcionálisan elküldhetjük az új státuszt is, de a szerver oldalon egyszerűbb csak váltani
+                        // body: JSON.stringify({ completed: isCompleted })
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                // Hiba esetén visszagörgetjük a checkbox állapotát
+                                this.checked = !isCompleted;
+                                // Hibaüzenet megjelenítése (opcionális)
+                                console.error('Failed to toggle task completed status');
+                                alert('Failed to update task status.');
+                            } else {
+                                // Sikeres frissítés esetén vizuálisan frissítjük a sort
+                                if (isCompleted) {
+                                    row.classList.add('completed-task');
+                                    // Opcionálisan frissítheted a státusz cellát is "✅ Completed"-re
+                                    const statusCell = row.querySelector('td:nth-child(5)'); // Figyelj az oszlop számára
+                                    if (statusCell) {
+                                        statusCell.innerHTML = '<span class="status-COMPLETED">✅ Completed</span>';
+                                    }
+                                } else {
+                                    row.classList.remove('completed-task');
+                                    // Opcionálisan frissítheted a státusz cellát is "📌 Pending"-re (vagy az eredetire)
+                                    const statusCell = row.querySelector('td:nth-child(5)'); // Figyelj az oszlop számára
+                                    if (statusCell) {
+                                        // Ez bonyolultabb lehet, ha vissza kell állítani az eredeti státuszt
+                                        // Egyszerűbb, ha csak a completed státuszra reagál a CSS
+                                    }
+                                }
+                                // Távolítsuk el a lejárat figyelmeztetés stílust, ha készen van
+                                if (isCompleted) {
+                                    row.classList.remove('due-warning');
+                                } else {
+                                    // Ha visszavonjuk a készenlétet, ellenőrizzük újra a határidő figyelmeztetést
+                                    // Ez a legegyszerűbben egy oldalfrissítéssel vagy egy külön JS függvénnyel történhet
+                                    // Most az egyszerűség kedvéért nem csinálunk itt semmit, a következő betöltéskor jó lesz
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            // Hiba esetén visszagörgetjük a checkbox állapotát
+                            this.checked = !isCompleted;
+                            alert('An error occurred while updating task status.');
+                        });
+                });
+            });
+        });
+    </script>
+
 </div>
 </body>
 </html>

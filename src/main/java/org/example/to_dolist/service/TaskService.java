@@ -5,6 +5,7 @@ import org.example.to_dolist.domain.Task;
 import org.example.to_dolist.exception.TaskNotFoundException;
 import org.example.to_dolist.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // Importálni
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +24,8 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
+        // Új feladat létrehozásakor alapértelmezetten legyen nem completed
+        task.setCompleted(false);
         return taskRepository.save(task);
     }
 
@@ -31,7 +34,16 @@ public class TaskService {
     }
 
     public Task updateTask(Task task) {
-        return taskRepository.save(task);
+        // Biztosítsuk, hogy a completed státusz is frissüljön
+        Task existingTask = getTaskById(task.getId());
+        existingTask.setTitle(task.getTitle());
+        existingTask.setDescription(task.getDescription());
+        existingTask.setDueDate(task.getDueDate());
+        existingTask.setStatus(task.getStatus());
+        existingTask.setPriority(task.getPriority());
+        existingTask.setUser(task.getUser());
+        existingTask.setCompleted(task.isCompleted()); // Frissítjük a completed mezőt is
+        return taskRepository.save(existingTask);
     }
 
     public void deleteTask(UUID id) {
@@ -47,12 +59,21 @@ public class TaskService {
 
         return taskRepository.findAll().stream()
                 .filter(task -> {
-                    if (task.getDueDate() != null) {
+                    // Csak azokat a feladatokat listázzuk, amik nincsenek készen!
+                    if (!task.isCompleted() && task.getDueDate() != null) {
                         long daysUntilDue = task.getDueDate().toEpochDay() - currentDate.toEpochDay();
-                        return daysUntilDue <= 1; // Lejárt és 1 napon belüli határidők
+                        return daysUntilDue <= 1; // Lejárt (<=0) és 1 napon belüli (==1) határidők
                     }
                     return false;
                 })
                 .collect(Collectors.toList());
+    }
+
+    // ÚJ metódus a completed státusz váltásához
+    @Transactional // Tranzakciókezelés hozzáadása
+    public void toggleTaskCompleted(UUID id) {
+        Task task = getTaskById(id);
+        task.setCompleted(!task.isCompleted()); // Státusz váltása
+        taskRepository.save(task); // Mentés
     }
 }

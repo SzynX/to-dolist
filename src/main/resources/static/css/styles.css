@@ -376,12 +376,41 @@ body.welcome-page .action-buttons {
     font-weight: 600;
 }
 
+/* --- NEW: Style for completed task rows --- */
+.styled-table tbody tr.completed-task {
+    text-decoration: line-through; /* Strikethrough text */
+    color: var(--light-text-color); /* Fade text color */
+    opacity: 0.8; /* Slightly reduce opacity */
+    background-color: #e9e9eb; /* Light grey background */
+    transition: all var(--transition-speed-normal); /* Smooth transition */
+}
+
+/* Ensure specific elements within completed rows are NOT affected by strikethrough/fading */
+.styled-table tbody tr.completed-task td .btn-edit,
+.styled-table tbody tr.completed-task td .btn-delete,
+.styled-table tbody tr.completed-task td form button,
+.styled-table tbody tr.completed-task td input[type="checkbox"] {
+    text-decoration: none; /* Remove strikethrough */
+    opacity: 1; /* Reset opacity */
+    color: inherit; /* Inherit original text color from button/element, not faded row */
+}
+
 /* Status and Priority Specific Styling */
 /* Using classes based on the enum names */
 .status-PENDING { color: var(--warning-color); font-weight: 600; }
 .status-IN_PROGRESS { color: var(--info-color); font-weight: 600; }
 .status-COMPLETED { color: var(--success-color); font-weight: 600; }
 .status-UNKNOWN { color: var(--secondary-color); font-style: italic; font-weight: normal;} /* Grey for unknown */
+
+/* Ensure Status/Priority text color is visible even on completed row background */
+.styled-table tbody tr.completed-task .status-PENDING,
+.styled-table tbody tr.completed-task .status-IN_PROGRESS,
+.styled-table tbody tr.completed-task .status-COMPLETED,
+.styled-table tbody tr.completed-task .status-UNKNOWN {
+    color: inherit; /* Use the faded row color */
+    /* Or explicitly set a color if needed, e.g., color: var(--text-color); */
+}
+
 
 .priority-LOW { color: var(--low-priority-color); font-weight: 600; }
 .priority-MEDIUM { color: var(--medium-priority-color); font-weight: 600; }
