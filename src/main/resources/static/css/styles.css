@@ -1,485 +1,641 @@
-/* General Reset */
+/* --- Variables --- */
+:root {
+    --primary-color: #4A90E2;       /* Primary Blue */
+    --secondary-color: #5D6D7E;     /* Secondary Grey */
+    --accent-color: #34C759;        /* Accent Green */
+    --text-color: #2C3E50;          /* Dark Text */
+    --light-text-color: #7F8C8D;   /* Lighter text for secondary info */
+    --bg-color: #F5F7FA;            /* Light Background */
+    --card-bg-color: #FFFFFF;       /* Card Background White */
+    --success-color: #2ECC71;       /* Success Green */
+    --error-color: #E74C3C;         /* Error Red */
+    --warning-color: #F39C12;       /* Warning Orange */
+    --info-color: #3498DB;         /* Info Blue (can be used for In Progress) */
+
+    --high-priority-color: var(--error-color);   /* High Priority Red */
+    --medium-priority-color: var(--warning-color); /* Medium Priority Orange */
+    --low-priority-color: var(--success-color);    /* Low Priority Green */
+
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 25px; /* Used for pill-shaped buttons */
+
+    --shadow-small: 0 2px 5px rgba(0,0,0,0.1);
+    --shadow-medium: 0 5px 15px rgba(0,0,0,0.15);
+    --shadow-large: 0 10px 30px rgba(0,0,0,0.2);
+
+    --transition-speed-fast: 0.2s ease-out;
+    --transition-speed-normal: 0.3s ease-in-out;
+
+    --table-button-gap: 8px; /* Gap specifically for buttons in table cells */
+}
+
+/* --- Global Styles --- */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: #f0f2f5;
-    color: #2c3e50;
-    font-size: 16px;
+    background: linear-gradient(135deg, var(--bg-color), var(--primary-color)); /* Soft Gradient Background */
+    background-attachment: fixed; /* Keeps background in place on scroll */
+    font-family: 'Roboto', sans-serif; /* Using a slightly more modern font (ensure it's linked in HTML head) */
+    color: var(--text-color);
+    line-height: 1.6;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    display: flex;
+    flex-direction: column; /* Arrange children vertically */
+    padding-bottom: 20px; /* Add padding at the bottom */
 }
 
-/* Container */
 .container {
-    width: 90%;
     max-width: 1200px;
-    margin: auto;
-    padding: 30px;
+    margin: 20px auto; /* Add top/bottom margin */
+    padding: 0 20px;
+    width: 100%; /* Ensure it uses available width */
+    flex-grow: 1; /* Allow container to grow and push footer down */
+    position: relative;
+    z-index: 1; /* Ensure content is above background effects */
 }
 
-/* Header */
+h1, h2, h3 {
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    font-weight: 700; /* Make headings bolder */
+}
+
+/* --- Header Styles --- */
 header {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    padding: 1.5rem 0;
+    border-radius: 0 0 var(--border-radius-medium) var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 40px; /* More space below header */
 }
 
 header h1 {
-    font-size: 2.5rem;
-    color: #34495e;
-    letter-spacing: 1px;
-    animation: fadeIn 1s ease-in-out;
+    margin: 0;
+    font-size: 2.8rem; /* Slightly larger header title */
+    color: white; /* Header heading is white */
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.1); /* More defined text shadow */
 }
 
-/* Buttons */
-.btn,
-.btn-edit,
-.btn-delete {
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-size: 1rem;
+/* --- Alert Messages --- */
+.alert {
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: var(--border-radius-medium);
+    text-align: center;
     font-weight: bold;
-    text-decoration: none;
-    border: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-    cursor: pointer;
+    animation: fadeIn 0.6s ease-in-out; /* Slightly longer fade-in */
+    box-shadow: var(--shadow-small);
+    opacity: 1; /* Ensure opacity is 1 */
 }
 
-.btn {
-    background-color: #6c5ce7;
+.alert-success {
+    background: var(--success-color);
     color: white;
 }
 
-.btn:hover {
-    background-color: #5a4fcf;
-    transform: translateY(-2px);
+.alert-error {
+    background: var(--error-color);
+    color: white;
 }
 
+/* --- Main Content Area (Card Style) --- */
+main {
+    margin: 30px 0; /* Space around main content */
+    background: var(--card-bg-color); /* White background for the content block */
+    padding: 40px; /* Inner spacing */
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-large); /* More prominent shadow */
+    animation: fadeIn 0.8s ease-out; /* Add fade-in animation */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Specific Style for Welcome Page Main Content --- */
+body.welcome-page main {
+    background: none; /* Remove white background */
+    box-shadow: none; /* Remove card shadow */
+    padding: 0; /* Remove inner padding */
+    margin: 3rem auto; /* Re-center and add margin */
+    max-width: 800px; /* Limit the width for centered content */
+    text-align: center; /* Center text within the limited width */
+}
+
+body.welcome-page .hero-text {
+    font-size: 1.5rem; /* Adjust font size for welcome page */
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+body.welcome-page .action-buttons {
+    /* Adjust button layout for welcome page */
+    justify-content: center;
+    gap: 2rem; /* Slightly larger gap between buttons */
+    margin-top: 2rem;
+}
+
+
+/* --- Form Layout --- */
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Label on left (1 part), input on right (2 parts) */
+    gap: 1.5rem; /* Space between rows and columns */
+    align-items: center; /* Vertically align items */
+    max-width: 800px; /* Limit form width */
+    margin: 0 auto 2rem auto; /* Center form and add bottom margin */
+    padding: 2rem;
+    background: var(--bg-color); /* Light background for form area */
+    border-radius: var(--border-radius-medium);
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.08); /* More defined inner shadow */
+}
+
+.form-layout label {
+    font-weight: 600; /* Slightly lighter bold */
+    color: var(--text-color);
+    text-align: right; /* Align labels to the right */
+    padding-right: 15px; /* Space between label and input */
+    display: block; /* Ensure label takes full width in its cell */
+    white-space: nowrap; /* Prevent label text from wrapping */
+}
+
+.form-layout input[type="text"],
+.form-layout input[type="date"],
+.form-layout select {
+    width: 100%; /* Full width within its grid cell */
+    padding: 0.9rem; /* Slightly more padding */
+    border: 1px solid var(--border-color-dark);
+    border-radius: var(--border-radius-small);
+    font-size: 1rem;
+    transition: border-color var(--transition-speed-normal), box-shadow var(--transition-speed-normal);
+    background-color: white; /* Explicitly white background */
+}
+
+.form-layout input[type="checkbox"] {
+    width: auto;
+    justify-self: start; /* Align to the start of the grid cell */
+    margin-left: 10px; /* Add space from label */
+    accent-color: var(--accent-color); /* Style checkbox */
+    transform: scale(1.3); /* Slightly larger checkbox */
+    cursor: pointer;
+}
+
+.form-layout input[type="text"]:focus,
+.form-layout input[type="date"]:focus,
+.form-layout select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.6); /* More prominent focus shadow */
+    outline: none; /* Remove default outline */
+}
+
+.form-layout input[type="text"]::placeholder,
+.form-layout input[type="date"]::placeholder {
+    color: var(--light-text-color); /* Style placeholder text */
+    font-style: italic;
+}
+
+
+/* Make the action buttons span two columns in the grid */
+.form-layout .action-buttons {
+    grid-column: span 2;
+    text-align: center; /* Center the buttons */
+    margin-top: 1rem; /* Space above buttons within form */
+}
+
+/* --- Button Styles --- */
+/* General button container/layout */
+.action-buttons {
+    display: flex;
+    justify-content: center; /* Center the button group */
+    gap: 15px; /* Space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    margin-top: 20px; /* Space above button group */
+    margin-bottom: 20px; /* Space below button group */
+}
+
+/* Base button style - Applied to .btn class */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; /* Center content within button */
+    gap: 8px; /* Space between icon and text */
+    padding: 0.8rem 1.8rem; /* More padding */
+    border-radius: var(--border-radius-large); /* Pill shape */
+    text-decoration: none;
+    font-weight: 600; /* Slightly bolder text */
+    transition: all var(--transition-speed-normal);
+    cursor: pointer;
+    border: none;
+    box-shadow: var(--shadow-small);
+    font-size: 1.05rem; /* Slightly larger font */
+    min-width: 140px; /* Ensure minimum width */
+    position: relative; /* Needed for potential effects */
+    overflow: hidden; /* Hide overflow from effects */
+}
+
+/* Add a subtle ripple effect on click */
+.btn:active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.3); /* White ripple */
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1);
+    transform-origin: 50% 50%;
+    animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0.1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(12);
+        opacity: 0;
+    }
+}
+
+/* Hover and Active states for all buttons */
+.btn:hover {
+    transform: translateY(-4px); /* More pronounced lift effect */
+    box-shadow: var(--shadow-medium);
+}
+
+.btn:active {
+    transform: translateY(-1px); /* Press effect */
+    box-shadow: var(--shadow-small);
+}
+
+/* Specific Button Colors */
 .btn-edit {
-    background-color: #0984e3;
+    background: var(--accent-color); /* Green */
     color: white;
 }
 
 .btn-edit:hover {
-    background-color: #0871c2;
+    background: #28a745; /* Slightly darker green */
 }
 
 .btn-delete {
-    background-color: #d63031;
+    background: var(--error-color); /* Red */
     color: white;
+    /* Removed specific delete button animation for uniformity */
 }
 
 .btn-delete:hover {
-    background-color: #c0392b;
+    background: #c0392b; /* Slightly darker red */
+    /* Removed pulsing animation on hover */
 }
 
-.action-buttons {
-    text-align: center;
-    margin-bottom: 25px;
+.btn-create {
+    background: var(--success-color); /* Success Green */
+    color: white;
 }
 
-.action-buttons a {
-    margin: 8px;
+.btn-create:hover {
+    background: #218838; /* Slightly darker success green */
 }
 
-/* Table Styles */
+.btn-manage {
+    background: var(--secondary-color); /* Grey */
+    color: white;
+}
+
+.btn-manage:hover {
+    background: #495765; /* Slightly darker grey */
+}
+
+.btn-warning {
+    background: var(--warning-color); /* Orange */
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #e08e0b; /* Slightly darker warning orange */
+}
+
+
+/* --- Table Styles --- */
 .styled-table {
     width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 30px;
-    border-radius: 6px;
-    overflow: hidden;
+    border-collapse: collapse; /* Remove space between borders */
+    margin: 25px 0; /* Space above and below table */
+    font-size: 0.95em; /* Slightly larger font */
+    min-width: 400px;
+    box-shadow: var(--shadow-medium);
+    border-radius: var(--border-radius-medium);
+    overflow: hidden; /* Ensure border-radius applies */
+    border: 1px solid var(--border-color-light); /* Outer border */
+}
+
+.styled-table thead tr {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: left;
+    font-weight: 700; /* Bolder header text */
 }
 
 .styled-table th,
 .styled-table td {
-    padding: 14px;
-    text-align: center;
-    border-bottom: 1px solid #ecf0f1;
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border-color-light); /* Horizontal borders */
+    vertical-align: middle; /* Vertically center content */
 }
 
-.styled-table th {
-    background-color: #2d3436;
-    color: #ffffff;
-    text-transform: uppercase;
-    font-size: 0.9rem;
+/* Alternating row colors for readability */
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f8f9fa; /* Very light grey */
 }
 
-.styled-table tr:hover {
-    background-color: #f1f2f6;
+/* Hover effect on table rows */
+.styled-table tbody tr:hover {
+    background-color: #e9ecef; /* Light background on hover */
+    transform: scale(1.005); /* Subtle zoom effect */
+    transition: background-color var(--transition-speed-normal), transform 0.1s ease-in-out;
 }
 
-/* Status coloring */
-.status-TO_DO {
-    background-color: #ffeaa7;
+/* Specific styling for warning rows (e.g., upcoming due date) */
+.styled-table tbody tr.due-warning {
+    background-color: #ffeeba; /* Light yellow background for warnings */
+    color: #665d45; /* Darker text color for readability */
+    font-weight: 600;
 }
 
-.status-IN_PROGRESS {
-    background-color: #74b9ff;
-}
+/* Status and Priority Specific Styling */
+/* Using classes based on the enum names */
+.status-PENDING { color: var(--warning-color); font-weight: 600; }
+.status-IN_PROGRESS { color: var(--info-color); font-weight: 600; }
+.status-COMPLETED { color: var(--success-color); font-weight: 600; }
+.status-UNKNOWN { color: var(--secondary-color); font-style: italic; font-weight: normal;} /* Grey for unknown */
 
-.status-DONE {
-    background-color: #55efc4;
-}
+.priority-LOW { color: var(--low-priority-color); font-weight: 600; }
+.priority-MEDIUM { color: var(--medium-priority-color); font-weight: 600; }
+.priority-HIGH { color: var(--high-priority-color); font-weight: 600; }
 
-/* Alerts */
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 6px;
-    font-size: 1rem;
-    animation: fadeIn 0.8s ease-in-out;
-    text-align: center;
-}
 
-.alert-success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-/* No tasks */
-.no-tasks {
-    padding: 30px;
-    text-align: center;
-    font-size: 1.3rem;
-    color: #636e72;
-    background-color: #dfe6e9;
-    border-radius: 6px;
-    margin-top: 20px;
-}
-
-/* Form Layout */
-.form-layout {
-    max-width: 600px;
-    margin: auto;
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+/* Style for action buttons within table cells container */
+.styled-table td:last-child { /* Apply flexbox to the last cell */
     display: flex;
-    flex-direction: column;
-    gap: 20px;
+    align-items: center; /* Vertically center buttons */
+    gap: var(--table-button-gap); /* Add gap between buttons */
 }
 
-.form-layout label {
-    font-size: 1rem;
-    color: #2d3436;
+/* Style for action buttons within table cells */
+/* These rules ensure Edit and Delete buttons in tables look similar in size/shape */
+.styled-table td .btn-edit,
+.styled-table td .btn-delete,
+.styled-table td form button { /* Also target the button inside the form */
+    padding: 0.4rem 0.8rem; /* Smaller padding for table buttons */
+    font-size: 0.85rem;
+    border-radius: var(--border-radius-medium); /* Slightly less rounded */
+    box-shadow: none; /* No shadow on table buttons */
+    transform: none; /* No transform on table buttons */
+    transition: background-color var(--transition-speed-normal), opacity var(--transition-speed-normal);
+    min-width: auto; /* Remove min-width constraint */
+    flex-shrink: 0; /* Prevent buttons from shrinking */
+    /* Specific background colors and hover effects are handled by their individual classes (.btn-edit, .btn-delete) */
 }
 
-.form-layout input,
-.form-layout select {
-    padding: 10px;
-    font-size: 1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    transition: all 0.3s ease;
+/* Ensure delete button form is inline and doesn't add extra margin */
+.styled-table td form {
+    display: contents; /* Use contents to not create a box, allowing gap on parent (td) */
 }
 
-.form-layout input:focus,
-.form-layout select:focus {
-    border-color: #6c5ce7;
-    outline: none;
-    box-shadow: 0 0 5px rgba(108, 92, 231, 0.4);
+/* Explicitly ensure hover styles are simple for table buttons */
+.styled-table td .btn-edit:hover {
+    background-color: #28a745; /* Darker green */
+    opacity: 0.9;
 }
 
-.form-layout button {
-    background-color: #6c5ce7;
-    color: white;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+.styled-table td .btn-delete:hover,
+.styled-table td form button:hover { /* Apply hover to button inside form too */
+    background-color: #c0392b; /* Darker red */
+    opacity: 0.9;
+    animation: none; /* Ensure no animation on hover */
 }
 
-.form-layout button:hover {
-    background-color: #5a4fcf;
-    transform: translateY(-2px);
+
+/* --- Empty State Message --- */
+.no-tasks {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--secondary-color); /* Use secondary color for softer look */
+    padding: 3rem; /* More padding */
+    background: var(--card-bg-color); /* White background */
+    border: 2px dashed var(--border-color-light); /* Dashed border */
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-small);
+    margin-top: 40px; /* Space above */
+    font-style: italic;
+    line-height: 1.5;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
 
-/* Responsive Enhancements */
-@media (max-width: 768px) {
-    .styled-table th,
-    .styled-table td {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-
-    .form-layout {
-        padding: 20px;
+/* --- Responsive Design --- */
+@media (max-width: 992px) {
+    .container {
+        padding: 0 15px;
     }
 
     header h1 {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
 
-    .btn, .btn-edit, .btn-delete {
-        padding: 8px 14px;
-        font-size: 0.9rem;
-    }
-}
-
-/* === EMOJI ICONS FOR TASK AND USER === */
-.emoji {
-    margin-right: 6px;
-    font-size: 1.1rem;
-}
-
-/* === TABLE ENHANCEMENTS === */
-.styled-table td ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.styled-table td ul li::before {
-    content: "📝 ";
-    margin-right: 5px;
-}
-
-/* === EMPTY STATE TEXT === */
-.empty-message {
-    font-style: italic;
-    color: #b2bec3;
-    font-size: 1.1rem;
-    padding: 10px;
-}
-
-/* === CARD-LIKE SECTIONS FOR USERS === */
-.user-card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
-    animation: fadeIn 0.5s ease;
-}
-
-/* === ENHANCED HEADER ANIMATION === */
-header h1::after {
-    content: " ✨";
-    animation: sparkle 1.5s ease-in-out infinite alternate;
-}
-
-@keyframes sparkle {
-    from { opacity: 0.4; transform: scale(1); }
-    to { opacity: 1; transform: scale(1.1); }
-}
-
-/* === TOGGLE SWITCHES FOR FUTURE USE === */
-.toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 24px;
-}
-
-.toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    border-radius: 34px;
-    transition: .4s;
-}
-
-.slider::before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-.toggle-switch input:checked + .slider {
-    background-color: #6c5ce7;
-}
-
-.toggle-switch input:checked + .slider::before {
-    transform: translateX(26px);
-}
-
-.priority-low {
-    color: green;
-}
-
-.priority-medium {
-    color: yellow;
-}
-
-.priority-high {
-    color: red;
-}
-/* Table Row Priority Color */
-.priority-LOW {
-    background-color: #55efc4; /* Green */
-}
-
-.priority-MEDIUM {
-    background-color: #ffeaa7; /* Yellow */
-}
-
-.priority-HIGH {
-    background-color: #e74c3c; /* Red */
-    color: white; /* White text for contrast */
-}
-.logo {
-    height: 150px; /* korábbi 60px helyett */
-    margin-bottom: 20px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    animation: logoFade 1.5s ease-in-out;
-}
-
-
-@keyframes logoFade {
-    from {
-        opacity: 0;
-        transform: translateY(-20px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-.due-warning {
-    background-color: #fff3cd; /* Világos sárga háttér */
-    border-left: 5px solid #ffc107; /* Sárga szegély */
-}
-
-/* Új navbar stílusok */
-.navbar {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 15px 0;
-}
-
-.navbar-logo {
-    height: 40px;
-    filter: drop-shadow(0 2px 4px rgba(255,255,255,0.2));
-}
-
-.nav-link {
-    font-size: 1.1rem;
-    margin: 0 15px;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.nav-link.active {
-    color: #6c5ce7 !important;
-    font-weight: bold;
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #6c5ce7;
-}
-
-/* Reszponzív stílusok */
-@media (max-width: 768px) {
-    .navbar-collapse {
-        background: #2d3436;
-        padding: 20px;
-        margin-top: 15px;
-        border-radius: 8px;
+    main {
+        padding: 30px;
     }
 
-    .nav-link {
-        margin: 10px 0;
+    .form-layout {
+        gap: 1rem;
+        padding: 1.5rem;
     }
 
-    .navbar-logo {
-        display: none;
+    .form-layout label {
+        padding-right: 10px; /* Adjust label padding */
     }
-}
-/* Fő stílusok */
-body {
-    padding-top: 80px;
-    background-color: #f8f9fa;
-}
 
-.navbar-logo {
-    height: 40px;
-    margin-right: 10px;
-}
-
-/* Konténer animáció */
-.container {
-    animation: fadeInUp 0.8s ease-out;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    .styled-table {
+        font-size: 0.9em;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-/* Reszponzív beállítások */
-@media (max-width: 768px) {
-    .navbar-brand {
+    .styled-table th, .styled-table td {
+        padding: 10px 12px;
+    }
+
+    .btn {
+        padding: 0.7rem 1.4rem;
         font-size: 1rem;
+        gap: 6px;
     }
 
-    .navbar-logo {
-        height: 30px;
+    /* Adjust table button size and gap */
+    .styled-table td .btn-edit,
+    .styled-table td .btn-delete,
+    .styled-table td form button {
+        padding: 0.35rem 0.7rem;
+        font-size: 0.8rem;
+        gap: 4px; /* Smaller gap */
+    }
+    .styled-table td:last-child {
+        gap: 6px; /* Adjust flex gap */
+    }
+}
+
+
+@media (max-width: 768px) {
+    /* Stack form elements */
+    .form-layout {
+        grid-template-columns: 1fr; /* Stack labels and inputs */
+        gap: 1rem; /* Adjust gap */
+        padding: 1rem;
     }
 
-    .display-4 {
+    .form-layout label {
+        text-align: left; /* Align labels to left when stacked */
+        padding-right: 0;
+        margin-bottom: 5px; /* Space below label when stacked */
+        white-space: normal; /* Allow labels to wrap */
+    }
+
+    .form-layout input[type="checkbox"] {
+        justify-self: center; /* Center checkbox when stacked */
+        margin-left: 0;
+    }
+
+    /* Action buttons span only one column when stacked */
+    .form-layout .action-buttons {
+        grid-column: span 1;
+        flex-direction: column; /* Stack buttons */
+        align-items: center; /* Center stacked buttons */
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    /* Make stacked form buttons wider */
+    .form-layout .action-buttons .btn {
+        width: 90%; /* Make buttons take up more width */
+        max-width: 300px; /* Max width for stacked buttons */
+        justify-content: center; /* Center content in stacked buttons */
+        padding: 0.8rem 1.5rem; /* Adjust padding */
+    }
+
+
+    /* Adjust header font size */
+    header h1 {
         font-size: 2rem;
     }
+
+    /* Adjust main padding */
+    main {
+        padding: 20px;
+    }
+
+    /* Adjust table font size */
+    .styled-table {
+        font-size: 0.85em;
+    }
+
+    .styled-table th, .styled-table td {
+        padding: 8px 10px;
+    }
+
+    /* Stack action buttons below table if needed */
+    .action-buttons {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    /* Make general action buttons wider */
+    .action-buttons .btn {
+        width: 90%;
+        max-width: 300px;
+        justify-content: center;
+        padding: 0.8rem 1.5rem; /* Adjust padding */
+    }
+
+    /* Adjust empty state text size */
+    .no-tasks {
+        font-size: 1.2rem;
+        padding: 2rem;
+    }
+
+    /* Further adjust table button size and gap */
+    .styled-table td .btn-edit,
+    .styled-table td .btn-delete,
+    .styled-table td form button {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+        gap: 2px; /* Smaller gap */
+        min-width: auto;
+    }
+    .styled-table td:last-child {
+        gap: 4px; /* Adjust flex gap */
+    }
 }
 
-/* Aktív link stílusa */
-.nav-link.active {
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
-}
+@media (max-width: 480px) {
+    /* Reduce container padding */
+    .container {
+        padding: 0 10px;
+    }
 
-/* Logo kisebbítése a navbarban */
-.navbar-logo {
-    height: 30px;
-    width: auto;
+    /* Adjust header font size */
+    header h1 {
+        font-size: 1.6rem;
+    }
+
+    /* Adjust main padding */
+    main {
+        padding: 15px;
+    }
+
+    /* Further adjust stacked form button width */
+    .form-layout .action-buttons .btn {
+        width: 95%;
+        padding: 0.7rem 1.2rem; /* Further adjust padding */
+    }
+
+    /* Adjust table font size */
+    .styled-table {
+        font-size: 0.75em;
+    }
+
+    /* Adjust table cell padding */
+    .styled-table th, .styled-table td {
+        padding: 6px 8px;
+    }
+
+    /* Further adjust general action button width */
+    .action-buttons .btn {
+        width: 95%;
+        padding: 0.7rem 1.2rem; /* Further adjust padding */
+    }
+
+    /* Smallest table button size and gap */
+    .styled-table td .btn-edit,
+    .styled-table td .btn-delete,
+    .styled-table td form button {
+        padding: 0.2rem 0.5rem;
+        font-size: 0.7rem;
+        gap: 1px; /* Smallest gap */
+    }
+    .styled-table td:last-child {
+        gap: 2px; /* Adjust flex gap */
+    }
 }
