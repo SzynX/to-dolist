@@ -17,6 +17,8 @@
         <div class="action-buttons">
             <a href="/tasks/new" class="btn btn-edit">➕ Create New Task</a>
             <a href="/users" class="btn btn-edit">👤 Manage Users</a>
+            <!-- Új link hozzáadása a közelgő határidőkkel rendelkező feladatok listájához -->
+            <a href="/tasks/due-warning" class="btn btn-edit">⚠️ Due Date Warnings</a>
         </div>
 
         <div class="task-list">
@@ -35,7 +37,8 @@
                 <tbody>
                 <tr th:each="task : ${tasks}"
                     th:class="'status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
-                              ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'}">
+                              ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'} +
+                              ${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) ? ' due-warning' : ''}">
                     <td th:text="${task.id}">1</td>
                     <td th:text="${task.title}">Task Title</td>
                     <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>

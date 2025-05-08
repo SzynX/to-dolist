@@ -354,3 +354,132 @@ header h1::after {
     background-color: #e74c3c; /* Red */
     color: white; /* White text for contrast */
 }
+.logo {
+    height: 150px; /* korábbi 60px helyett */
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    animation: logoFade 1.5s ease-in-out;
+}
+
+
+@keyframes logoFade {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.due-warning {
+    background-color: #fff3cd; /* Világos sárga háttér */
+    border-left: 5px solid #ffc107; /* Sárga szegély */
+}
+
+/* Új navbar stílusok */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+
+.navbar-logo {
+    height: 40px;
+    filter: drop-shadow(0 2px 4px rgba(255,255,255,0.2));
+}
+
+.nav-link {
+    font-size: 1.1rem;
+    margin: 0 15px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link.active {
+    color: #6c5ce7 !important;
+    font-weight: bold;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #6c5ce7;
+}
+
+/* Reszponzív stílusok */
+@media (max-width: 768px) {
+    .navbar-collapse {
+        background: #2d3436;
+        padding: 20px;
+        margin-top: 15px;
+        border-radius: 8px;
+    }
+
+    .nav-link {
+        margin: 10px 0;
+    }
+
+    .navbar-logo {
+        display: none;
+    }
+}
+/* Fő stílusok */
+body {
+    padding-top: 80px;
+    background-color: #f8f9fa;
+}
+
+.navbar-logo {
+    height: 40px;
+    margin-right: 10px;
+}
+
+/* Konténer animáció */
+.container {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Reszponzív beállítások */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .navbar-logo {
+        height: 30px;
+    }
+
+    .display-4 {
+        font-size: 2rem;
+    }
+}
+
+/* Aktív link stílusa */
+.nav-link.active {
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+/* Logo kisebbítése a navbarban */
+.navbar-logo {
+    height: 30px;
+    width: auto;
+}

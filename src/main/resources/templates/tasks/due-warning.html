@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>⏰ Due Date Warnings</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>⚠️ Tasks with Upcoming Due Dates</h1>
+    </header>
+
+    <main>
+        <div th:if="${tasksWithDueWarnings != null and not #lists.isEmpty(tasksWithDueWarnings)}">
+            <table class="styled-table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>📌 Title</th>
+                    <th>📅 Due Date</th>
+                    <th>⚡ Priority</th>
+                    <th>🧾 Description</th>
+                    <th>📈 Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasksWithDueWarnings}">
+                    <td th:text="${task.id}">1</td>
+                    <td th:text="${task.title}">Task Title</td>
+                    <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2025-05-10</td>
+                    <td th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}">Priority</td>
+                    <td th:text="${task.description}">Task Description</td>
+                    <td th:text="${task.status != null ? task.status.name() : 'UNKNOWN'}">Status</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div th:if="${#lists.isEmpty(tasksWithDueWarnings)}" class="no-tasks">
+            <p>🛑 No tasks with upcoming due dates!</p>
+        </div>
+    </main>
+</div>
+</body>
+</html>

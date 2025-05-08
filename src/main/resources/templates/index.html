@@ -3,21 +3,25 @@
 <head>
     <title>Welcome to To-Do List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 <div class="container">
     <header>
+        <!-- Logó -->
+        <img src="/css/images/logo.png" alt="To-Do Logo" class="logo">
         <h1>To-Do List Application</h1>
     </header>
 
     <main>
         <p>Welcome to the To-Do List Application! Use the buttons below to navigate:</p>
 
-        <!-- Button linking to Tasks List -->
-        <a href="/tasks" class="btn">View Tasks</a>
-
-        <!-- Button linking to Users List -->
-        <a href="/users" class="btn">View Users</a>
+        <!-- Gombok -->
+        <div class="action-buttons">
+            <a href="/tasks" class="btn">🗒️ View Tasks</a>
+            <a href="/users" class="btn">👤 View Users</a>
+        </div>
     </main>
 
     <footer>
