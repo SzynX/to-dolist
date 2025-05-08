@@ -1,26 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Users List</title>
+    <title>👥 Users List</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Users and Their Tasks</h1>
+        <h1>👥 Users and Their Tasks</h1>
     </header>
 
     <main>
-        <a href="/users/new" class="btn">Create New User</a>
-        <a href="/tasks" class="btn">View Tasks</a>
+        <div class="action-buttons">
+            <a href="/users/new" class="btn btn-edit">👤➕ Create New User</a>
+            <a href="/tasks" class="btn">📋 View Tasks</a>
+        </div>
 
         <table class="styled-table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Tasks</th>
-                <th>Actions</th>
+                <th>🆔 ID</th>
+                <th>📛 Name</th>
+                <th>📝 Tasks</th>
+                <th>⚙️ Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -31,12 +33,12 @@
                     <ul th:if="${not #lists.isEmpty(user.tasks)}">
                         <li th:each="task : ${user.tasks}" th:text="${task.title}">Sample Task</li>
                     </ul>
-                    <span th:if="${#lists.isEmpty(user.tasks)}">No tasks</span>
+                    <span th:if="${#lists.isEmpty(user.tasks)}">❌ No tasks</span>
                 </td>
                 <td>
-                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn-edit">Edit</a>
+                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-edit">✏️ Edit</a>
                     <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn-delete">Delete</button>
+                        <button type="submit" class="btn btn-delete">🗑️ Delete</button>
                     </form>
                 </td>
             </tr>

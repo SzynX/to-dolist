@@ -1,154 +1,331 @@
-/* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
+/* General Reset */
+* {
     margin: 0;
     padding: 0;
-    color: #333;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+    background-color: #f0f2f5;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+/* Container */
 .container {
-    max-width: 960px;
-    margin: 20px auto;
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px;
 }
 
 /* Header */
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 header h1 {
-    color: #4CAF50;
+    font-size: 2.5rem;
+    color: #34495e;
+    letter-spacing: 1px;
+    animation: fadeIn 1s ease-in-out;
 }
 
 /* Buttons */
-.btn {
-    display: inline-block;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #4CAF50;
+.btn,
+.btn-edit,
+.btn-delete {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
     text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-    transition: background-color 0.3s ease;
+    border: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn {
+    background-color: #6c5ce7;
+    color: white;
 }
 
 .btn:hover {
-    background-color: #45a049;
+    background-color: #5a4fcf;
+    transform: translateY(-2px);
 }
 
-/* Table Styling */
-.styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+.btn-edit {
+    background-color: #0984e3;
+    color: white;
 }
 
-.styled-table thead tr {
-    background-color: #4CAF50;
-    color: #ffffff;
-    text-align: left;
+.btn-edit:hover {
+    background-color: #0871c2;
 }
 
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-}
-
-.styled-table tbody tr {
-    background-color: #f8f8f8;
-}
-
-.styled-table tbody tr:nth-of-type(odd) {
-    background-color: #f2f2f2;
-}
-
-.styled-table tbody tr:hover {
-    background-color: #e9e9e9;
-}
-
-/* Delete Buttons */
 .btn-delete {
-    background-color: #e74c3c;
-    border: none;
+    background-color: #d63031;
+    color: white;
 }
 
 .btn-delete:hover {
     background-color: #c0392b;
 }
 
-/* Specific to Todo List */
-.todo-table {
+.action-buttons {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.action-buttons a {
+    margin: 8px;
+}
+
+/* Table Styles */
+.styled-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    border-radius: 6px;
+    overflow: hidden;
 }
 
-.todo-table thead tr {
-    background-color: #4CAF50;
+.styled-table th,
+.styled-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.styled-table th {
+    background-color: #2d3436;
     color: #ffffff;
-    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.9rem;
 }
 
-.todo-table th,
-.todo-table td {
-    padding: 12px 15px;
-    border: 1px solid #ddd;
+.styled-table tr:hover {
+    background-color: #f1f2f6;
 }
 
-.todo-table tbody tr {
-    background-color: #f8f8f8;
+/* Status coloring */
+.status-TO_DO {
+    background-color: #ffeaa7;
 }
 
-.todo-table tbody tr:nth-of-type(odd) {
-    background-color: #f2f2f2;
+.status-IN_PROGRESS {
+    background-color: #74b9ff;
 }
 
-.todo-table tbody tr:hover {
-    background-color: #e9e9e9;
+.status-DONE {
+    background-color: #55efc4;
 }
 
-/* Form Styles for Creating and Editing Todos */
-.todo-form input,
-.todo-form textarea {
-    width: 100%;
+/* Alerts */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    animation: fadeIn 0.8s ease-in-out;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* No tasks */
+.no-tasks {
+    padding: 30px;
+    text-align: center;
+    font-size: 1.3rem;
+    color: #636e72;
+    background-color: #dfe6e9;
+    border-radius: 6px;
+    margin-top: 20px;
+}
+
+/* Form Layout */
+.form-layout {
+    max-width: 600px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-layout label {
+    font-size: 1rem;
+    color: #2d3436;
+}
+
+.form-layout input,
+.form-layout select {
     padding: 10px;
-    margin: 10px 0;
+    font-size: 1rem;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    transition: all 0.3s ease;
 }
 
-.todo-form button {
-    background-color: #4CAF50;
+.form-layout input:focus,
+.form-layout select:focus {
+    border-color: #6c5ce7;
+    outline: none;
+    box-shadow: 0 0 5px rgba(108, 92, 231, 0.4);
+}
+
+.form-layout button {
+    background-color: #6c5ce7;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.todo-form button:hover {
-    background-color: #45a049;
+.form-layout button:hover {
+    background-color: #5a4fcf;
+    transform: translateY(-2px);
 }
 
-/* Add custom styles for editing task status */
-.completed {
-    background-color: #27ae60;
-    color: white;
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.incomplete {
-    background-color: #e67e22;
-    color: white;
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    .styled-table th,
+    .styled-table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .form-layout {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 1.8rem;
+    }
+
+    .btn, .btn-edit, .btn-delete {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+}
+
+/* === EMOJI ICONS FOR TASK AND USER === */
+.emoji {
+    margin-right: 6px;
+    font-size: 1.1rem;
+}
+
+/* === TABLE ENHANCEMENTS === */
+.styled-table td ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.styled-table td ul li::before {
+    content: "📝 ";
+    margin-right: 5px;
+}
+
+/* === EMPTY STATE TEXT === */
+.empty-message {
+    font-style: italic;
+    color: #b2bec3;
+    font-size: 1.1rem;
+    padding: 10px;
+}
+
+/* === CARD-LIKE SECTIONS FOR USERS === */
+.user-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease;
+}
+
+/* === ENHANCED HEADER ANIMATION === */
+header h1::after {
+    content: " ✨";
+    animation: sparkle 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes sparkle {
+    from { opacity: 0.4; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+/* === TOGGLE SWITCHES FOR FUTURE USE === */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: .4s;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + .slider {
+    background-color: #6c5ce7;
+}
+
+.toggle-switch input:checked + .slider::before {
+    transform: translateX(26px);
 }

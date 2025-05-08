@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Edit User</title>
+    <title>👤✏️ Edit User</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Edit User</h1>
+        <h1>👤✏️ Edit User</h1>
     </header>
 
     <main>
-        <form th:action="@{/users/edit}" th:object="${user}" method="post">
-            <!-- Hidden ID Field -->
+        <form th:action="@{/users/edit}" th:object="${user}" method="post" class="form-layout">
             <input type="hidden" th:field="*{id}" />
 
-            <label for="name">Name:</label>
+            <label for="name">📛 Name:</label>
             <input type="text" id="name" name="name" th:field="*{name}" placeholder="User Name" required /><br/>
 
-            <button type="submit" class="btn">Save</button>
+            <label for="dateOfBirth">🎂 Date of Birth:</label>
+            <input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" /><br/>
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-edit">💾 Save</button>
+                <a href="/users" class="btn btn-delete">❌ Cancel</a>
+            </div>
         </form>
-        <a href="/users" class="btn">Cancel</a>
     </main>
 </div>
 </body>

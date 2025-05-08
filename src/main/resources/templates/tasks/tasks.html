@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Tasks List</title>
+    <title>📋 Task List</title>
     <link rel="stylesheet" href="/css/styles.css">
-    <style>
-        .alert { padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-        .alert-success { background-color: #dff0d8; border-color: #d6e9c6; color: #3c763d; }
-        .alert-error { background-color: #f2dede; border-color: #ebccd1; color: #a94442; }
-        .no-tasks { padding: 20px; text-align: center; color: #666; }
-    </style>
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Tasks and Their Details</h1>
+        <h1>🗂️ Task Overview</h1>
     </header>
 
     <main>
-        <!-- Success/Error üzenetek -->
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
         <div class="action-buttons">
-            <a href="/tasks/new" class="btn">Create New Task</a>
-            <a href="/users" class="btn">Manage Users</a>
+            <a href="/tasks/new" class="btn btn-edit">➕ Create New Task</a>
+            <a href="/users" class="btn btn-edit">👤 Manage Users</a>
         </div>
 
         <div class="task-list">
@@ -31,33 +24,40 @@
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Title</th>
-                    <th>Assigned User</th>
-                    <th>Status</th>
-                    <th>Due Date</th>
-                    <th>Actions</th>
+                    <th>📌 Title</th>
+                    <th>👤 Assigned User</th>
+                    <th>📈 Status</th>
+                    <th>📅 Due Date</th>
+                    <th>⚙️ Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="task : ${tasks}">
+                <tr th:each="task : ${tasks}"
+                    th:class="'status-' + ${task.status}">
                     <td th:text="${task.id}">1</td>
-                    <td th:text="${task.title}">Task 1</td>
+                    <td th:text="${task.title}">Task Title</td>
                     <td th:text="${task.user?.name} ?: 'Unassigned'">N/A</td>
-                    <td th:text="${task.status}">In Progress</td>
-                    <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2023-12-01</td>
                     <td>
-                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">Edit</a>
+                        <span th:switch="${task.status.name()}">
+                            <span th:case="'PENDING'">📌 Pending</span>
+                            <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
+                            <span th:case="'COMPLETED'">✅ Completed</span>
+                            <span th:case="*">❓ Unknown (<span th:text="${task.status.name()}"></span>)</span>
+                        </span>
+                    </td>
+                    <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2025-05-10</td>
+                    <td>
+                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
                         <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
-                            <button type="submit" class="btn-delete">Delete</button>
+                            <button type="submit" class="btn-delete">🗑️ Delete</button>
                         </form>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
-            <!-- No tasks üzenet -->
             <div th:if="${#lists.isEmpty(tasks)}" class="no-tasks">
-                <p>No tasks found. Create your first task!</p>
+                <p>🛑 No tasks found. Create your first one!</p>
             </div>
         </div>
     </main>

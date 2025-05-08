@@ -1,50 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Create Task</title>
+    <title>➕ Create Task</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>Create New Task</h1>
+        <h1>📝 Create New Task</h1>
     </header>
 
     <main>
-        <form th:action="@{/tasks}" method="post">
-            <!-- Rejtett mező a task objektumhoz -->
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <form th:action="@{/tasks}" method="post" class="form-layout">
             <input type="hidden" th:field="${task.id}" />
 
-            <label for="title">Title:</label>
-            <input type="text" id="title" th:field="${task.title}" required /><br/>
+            <label for="title">📌 Title:</label>
+            <input type="text" id="title" th:field="${task.title}" required />
 
-            <label for="description">Description:</label>
-            <input type="text" id="description" th:field="${task.description}" /><br/>
+            <label for="description">🧾 Description:</label>
+            <input type="text" id="description" th:field="${task.description}" />
 
-            <label for="dueDate">Due Date:</label>
-            <input type="date" id="dueDate" th:field="${task.dueDate}" required /><br/>
+            <label for="dueDate">📅 Due Date:</label>
+            <input type="date" id="dueDate" th:field="${task.dueDate}" required />
 
-            <label for="status">Status:</label>
+            <label for="status">📈 Status:</label>
             <select id="status" th:field="${task.status}">
                 <option th:each="status : ${statuses}"
-                        th:value="${status}"
-                        th:text="${status}"></option>
-            </select><br/>
+                        th:value="${status.name()}"
+                        th:text="${status.name() == 'PENDING' ? '📌 Pending'
+                                  : (status.name() == 'IN_PROGRESS' ? '⏳ In Progress'
+                                  : (status.name() == 'COMPLETED' ? '✅ Completed'
+                                  : status.name()))}">
+                </option>
+            </select>
 
-            <label for="completed">Completed:</label>
-            <input type="checkbox" id="completed" th:field="${task.completed}" /><br/>
+            <label for="completed">✅ Completed:</label>
+            <input type="checkbox" id="completed" th:field="${task.completed}" />
 
-            <!-- Javított user select -->
-            <label for="user">User:</label>
+            <label for="user">👤 Assigned User:</label>
             <select id="user" name="userId">
                 <option th:each="user : ${users}"
                         th:value="${user.id}"
                         th:text="${user.name}"></option>
-            </select><br/>
+            </select>
 
-            <button type="submit" class="btn">Save</button>
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-edit">💾 Save</button>
+                <a href="/tasks" class="btn btn-delete">❌ Cancel</a>
+            </div>
         </form>
-        <a href="/tasks" class="btn">Cancel</a>
     </main>
 </div>
 </body>

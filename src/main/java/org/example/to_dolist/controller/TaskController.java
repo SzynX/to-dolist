@@ -8,8 +8,10 @@ import org.example.to_dolist.service.TaskService;
 import org.example.to_dolist.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.UUID;
 
 @Controller
@@ -36,13 +38,21 @@ public class TaskController {
 
     @PostMapping
     public String saveTask(
-            @ModelAttribute Task task,
+            @ModelAttribute("task") Task task,
+            BindingResult bindingResult,
             @RequestParam("userId") UUID userId,
+            Model model,
             RedirectAttributes redirectAttributes
     ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("statuses", TaskStatus.values());
+            model.addAttribute("users", userService.getAllUsers());
+            return "tasks/create-task";
+        }
+
         try {
             User user = userService.getUserById(userId);
-            user.addTask(task); // Bidirekcionális kapcsolat frissítése
+            user.addTask(task);
             taskService.createTask(task);
             redirectAttributes.addFlashAttribute("success", "Task created successfully!");
         } catch (Exception e) {
@@ -62,10 +72,18 @@ public class TaskController {
 
     @PostMapping("/edit")
     public String updateTask(
-            @ModelAttribute Task task,
+            @ModelAttribute("task") Task task,
+            BindingResult bindingResult,
             @RequestParam("userId") UUID userId,
+            Model model,
             RedirectAttributes redirectAttributes
     ) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("statuses", TaskStatus.values());
+            model.addAttribute("users", userService.getAllUsers());
+            return "tasks/edit-task";
+        }
+
         try {
             User user = userService.getUserById(userId);
             task.setUser(user);
