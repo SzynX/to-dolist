@@ -17,6 +17,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String title;
     private String description;
     private LocalDate dueDate;
@@ -25,6 +26,10 @@ public class Task {
     private TaskStatus status;
 
     private boolean completed;
+
+    // Új prioritás mező hozzáadása
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

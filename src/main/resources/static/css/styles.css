@@ -329,3 +329,28 @@ header h1::after {
 .toggle-switch input:checked + .slider::before {
     transform: translateX(26px);
 }
+
+.priority-low {
+    color: green;
+}
+
+.priority-medium {
+    color: yellow;
+}
+
+.priority-high {
+    color: red;
+}
+/* Table Row Priority Color */
+.priority-LOW {
+    background-color: #55efc4; /* Green */
+}
+
+.priority-MEDIUM {
+    background-color: #ffeaa7; /* Yellow */
+}
+
+.priority-HIGH {
+    background-color: #e74c3c; /* Red */
+    color: white; /* White text for contrast */
+}

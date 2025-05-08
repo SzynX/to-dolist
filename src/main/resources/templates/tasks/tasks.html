@@ -20,7 +20,7 @@
         </div>
 
         <div class="task-list">
-            <table class="styled-table" th:if="${not #lists.isEmpty(tasks)}">
+            <table class="styled-table" th:if="${tasks != null and not #lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -28,24 +28,31 @@
                     <th>👤 Assigned User</th>
                     <th>📈 Status</th>
                     <th>📅 Due Date</th>
+                    <th>⚡ Priority</th>
                     <th>⚙️ Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}"
-                    th:class="'status-' + ${task.status}">
+                    th:class="'status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
+                              ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'}">
                     <td th:text="${task.id}">1</td>
                     <td th:text="${task.title}">Task Title</td>
-                    <td th:text="${task.user?.name} ?: 'Unassigned'">N/A</td>
+                    <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>
                     <td>
-                        <span th:switch="${task.status.name()}">
-                            <span th:case="'PENDING'">📌 Pending</span>
-                            <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
-                            <span th:case="'COMPLETED'">✅ Completed</span>
-                            <span th:case="*">❓ Unknown (<span th:text="${task.status.name()}"></span>)</span>
-                        </span>
+                            <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
+                                <span th:case="'PENDING'">📌 Pending</span>
+                                <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
+                                <span th:case="'COMPLETED'">✅ Completed</span>
+                                <span th:case="'UNKNOWN'">❓ Unknown</span>
+                            </span>
                     </td>
                     <td th:text="${#temporals.format(task.dueDate, 'yyyy-MM-dd')}">2025-05-10</td>
+                    <td>
+                        <span th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}">
+                            <!-- Priority Text Display -->
+                        </span>
+                    </td>
                     <td>
                         <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
                         <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">

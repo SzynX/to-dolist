@@ -37,6 +37,17 @@
                 </option>
             </select>
 
+            <label for="priority">⚡ Priority:</label>
+            <select id="priority" th:field="${task.priority}">
+                <option th:each="priority : ${priorities}"
+                        th:value="${priority.name()}"
+                        th:text="${priority.name() == 'LOW' ? '🟢 Low'
+                                  : (priority.name() == 'MEDIUM' ? '🟡 Medium'
+                                  : (priority.name() == 'HIGH' ? '🔴 High'
+                                  : priority.name()))}">
+                </option>
+            </select>
+
             <label for="completed">✅ Completed:</label>
             <input type="checkbox" id="completed" th:field="${task.completed}" />
 
