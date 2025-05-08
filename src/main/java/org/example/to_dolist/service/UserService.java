@@ -22,8 +22,8 @@ public class UserService {
 
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
-        // Lazy inicializáció aktiválása
-        users.forEach(user -> Hibernate.initialize(user.getTasks()));
+        // Lazy inicializáció aktiválása (ha szükséges a tasks lista eléréséhez itt vagy a nézetben)
+        // users.forEach(user -> Hibernate.initialize(user.getTasks())); // Ezt a sort csak akkor kell, ha users.getTasks() hívás történik itt vagy a nézetben
         return users;
     }
 

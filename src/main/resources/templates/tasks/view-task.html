@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Task Details: ' + ${task.title}">Task Details</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Egyedi stílusok a részletek oldal elrendezéséhez */
+        .task-details {
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--card-bg-color);
+            border-radius: var(--border-radius-medium);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .task-details h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 10px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+        }
+
+        .detail-item strong {
+            display: inline-block;
+            width: 150px; /* Fix width for labels */
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .detail-item span {
+            color: var(--secondary-color);
+        }
+
+        .detail-item pre {
+            white-space: pre-wrap; /* Wrap long description text */
+            word-wrap: break-word;
+            background-color: var(--bg-color);
+            padding: 10px;
+            border-radius: var(--border-radius-small);
+            border: 1px solid var(--border-color-light); /* assuming border-color-light is defined */
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+
+        .details-actions {
+            margin-top: 30px;
+            border-top: 1px solid var(--bg-color);
+            padding-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Task Details</h1>
+    </header>
+
+    <main>
+        <div class="task-details">
+            <h2 th:text="${task.title}">Task Title</h2>
+
+            <div class="detail-item">
+                <strong>ID:</strong> <span th:text="${task.id}">Task ID</span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Description:</strong> <pre th:text="${task.description}"></pre> </div>
+
+            <div class="detail-item">
+                <strong>Due Date:</strong> <span th:text="${task.dueDate != null ? #temporals.format(task.dueDate, 'yyyy-MM-dd') : 'N/A'}">2025-05-10</span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Status:</strong>
+                <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}"
+                      th:class="'status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'}">
+                     <span th:case="'PENDING'">📌 Pending</span>
+                     <span th:case="'IN_PROGRESS'">⏳ In Progress</span>
+                     <span th:case="'COMPLETED'">✅ Completed</span>
+                     <span th:case="'UNKNOWN'">❓ Unknown</span>
+                 </span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Priority:</strong>
+                <span th:text="${task.priority != null ? task.priority.name() : 'UNKNOWN'}"
+                      th:class="'priority-' + ${task.priority != null ? task.priority.name().toLowerCase() : 'unknown'}">
+                 </span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Completed:</strong> <span th:text="${task.completed ? 'Yes ✅' : 'No ❌'}">Yes/No</span>
+            </div>
+
+            <div class="detail-item">
+                <strong>Assigned User:</strong> <span th:text="${task.user != null ? task.user.name : 'Unassigned'}">User Name</span>
+            </div>
+
+            <div class="details-actions">
+                <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn btn-edit">✏️ Edit Task</a>
+                <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;"
+                      onsubmit="return confirm('Biztosan törölni szeretnéd ezt a feladatot?');">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button type="submit" class="btn btn-delete">🗑️ Delete Task</button>
+                </form>
+                <a href="/tasks" class="btn btn-manage">📋 Back to List</a>
+            </div>
+        </div>
+    </main>
+
+</div>
+</body>
+</html>

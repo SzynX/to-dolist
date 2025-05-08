@@ -7,7 +7,7 @@ import org.example.to_dolist.domain.TaskPriority;
 import org.example.to_dolist.domain.User;
 import org.example.to_dolist.service.TaskService;
 import org.example.to_dolist.service.UserService;
-import org.springframework.data.domain.Sort; // Importálni
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,22 +27,35 @@ public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
 
-    // Módosított metódus: elfogad sort paramétereket
     @GetMapping
     public String listTasks(
             Model model,
-            @RequestParam(defaultValue = "id") String sortBy, // Melyik mező szerint rendezzen (alap: id)
-            @RequestParam(defaultValue = "asc") String sortDirection // Milyen irányba (alap: asc)
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @RequestParam(value = "userId", required = false) String userId
     ) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
-        model.addAttribute("tasks", taskService.getAllTasks(sort)); // Lekérdezés rendezéssel
+        model.addAttribute("tasks", taskService.getAllTasks(userId, sort));
 
-        // Hozzáadjuk a rendezési információt a Modelhez, hogy a HTML kezelni tudja
         model.addAttribute("currentSortBy", sortBy);
         model.addAttribute("currentSortDirection", sortDirection);
 
-        return "tasks/tasks"; // A HTML sablon neve
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("currentUserId", userId);
+
+        return "tasks/tasks";
     }
+
+    // ÚJ VÉGPONT a feladat részletek megtekintéséhez
+    @GetMapping("/view/{id}")
+    public String viewTask(@PathVariable UUID id, Model model) {
+        Task task = taskService.getTaskById(id);
+        model.addAttribute("task", task);
+        // Esetleg hozzáadhatod a felhasználók listáját is, ha a view oldalon kell pl. "Change Assignment" gomb
+        // model.addAttribute("users", userService.getAllUsers());
+        return "tasks/view-task"; // Az új HTML sablon neve
+    }
+
 
     @GetMapping("/new")
     public String createForm(Model model) {

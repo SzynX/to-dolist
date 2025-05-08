@@ -3,48 +3,49 @@
 <head>
     <title>👥 Users List</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
     <header>
-        <h1>👥 Users and Their Tasks</h1>
-    </header>
+        <h1>👥 Users Overview</h1> </header>
 
     <main>
-        <div class="action-buttons">
-            <a href="/users/new" class="btn btn-edit">👤➕ Create New User</a>
-            <a href="/tasks" class="btn">📋 View Tasks</a>
-        </div>
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
-        <table class="styled-table">
-            <thead>
-            <tr>
-                <th>🆔 ID</th>
-                <th>📛 Name</th>
-                <th>📝 Tasks</th>
-                <th>⚙️ Actions</th>
-            </tr>
-            </thead>
+        <div class="action-buttons">
+            <a href="/users/new" class="btn btn-create">👤➕ Create New User</a> <a href="/tasks" class="btn btn-manage">📋 View Tasks</a> </div>
+
+        <table class="styled-table" th:if="${users != null and not #lists.isEmpty(users)}"> <thead>
+        <tr>
+            <th>🆔 ID</th>
+            <th>📛 Name</th>
+            <th>📝 Task Count</th> <th>⚙️ Actions</th>
+        </tr>
+        </thead>
             <tbody>
             <tr th:each="user : ${users}">
                 <td th:text="${user.id}">1</td>
                 <td th:text="${user.name}">John Doe</td>
                 <td>
-                    <ul th:if="${not #lists.isEmpty(user.tasks)}">
-                        <li th:each="task : ${user.tasks}" th:text="${task.title}">Sample Task</li>
-                    </ul>
-                    <span th:if="${#lists.isEmpty(user.tasks)}">❌ No tasks</span>
+                    <span th:text="${user.tasks != null ? user.tasks.size() : 0}">0</span> tasks
                 </td>
                 <td>
                     <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-edit">✏️ Edit</a>
-                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-delete">🗑️ Delete</button>
+                    <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;"
+                          onsubmit="return confirm('Biztosan törölni szeretnéd ezt a felhasználót? Ez a hozzárendelt feladatokat is érintheti.');"> <input type="hidden" name="_method" value="DELETE"/> <button type="submit" class="btn btn-delete">🗑️ Delete</button>
                     </form>
                 </td>
             </tr>
             </tbody>
         </table>
+
+        <div th:if="${users == null or #lists.isEmpty(users)}" class="no-tasks"> <p>🛑 No users found. Create your first one!</p>
+        </div>
     </main>
+
 </div>
 </body>
 </html>

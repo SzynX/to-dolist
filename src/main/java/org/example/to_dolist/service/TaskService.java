@@ -2,11 +2,12 @@ package org.example.to_dolist.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.to_dolist.domain.Task;
+import org.example.to_dolist.domain.User; // Importálni
 import org.example.to_dolist.exception.TaskNotFoundException;
 import org.example.to_dolist.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Sort; // Importálni
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final UserService userService; // Hozzáadjuk a UserService dependency-t
 
     public Task getTaskById(UUID id) {
         return taskRepository.findById(id)
@@ -25,19 +27,36 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
-        task.setCompleted(false); // Új feladat alapértelmezetten nem completed
+        task.setCompleted(false);
         return taskRepository.save(task);
     }
 
-    // Módosított metódus: elfogad Sort paramétert
-    public List<Task> getAllTasks(Sort sort) {
-        return taskRepository.findAll(sort); // Lekérdezés rendezéssel
+    // Módosított metódus: elfogad opcionális userId paramétert és Sort paramétert
+    public List<Task> getAllTasks(String userId, Sort sort) {
+        if (userId == null || userId.isEmpty() || "all".equalsIgnoreCase(userId)) {
+            // Ha nincs szűrés (null, üres string vagy "all"), kérjük le az összes feladatot rendezéssel
+            return taskRepository.findAll(sort);
+        } else if ("unassigned".equalsIgnoreCase(userId)) {
+            // Ha "unassigned" a szűrés, kérjük le a felhasználó nélküli feladatokat rendezéssel
+            return taskRepository.findByUserIsNull(sort);
+        } else {
+            // Ha konkrét felhasználó ID van megadva, kérjük le az ő feladatait rendezéssel
+            try {
+                UUID userUuid = UUID.fromString(userId);
+                // Ellenőrizzük, hogy a felhasználó létezik-e, mielőtt szűrünk (opcionális, de jó gyakorlat)
+                // User user = userService.getUserById(userUuid); // Lehet szükség rá, ha finomabb kezelés kell
+                return taskRepository.findByUserId(userUuid, sort);
+            } catch (IllegalArgumentException e) {
+                // Hibás UUID formátum esetén visszatérhetünk üres listával vagy dobhatunk kivételt
+                // Jelenleg visszatérünk az összes feladattal rendezve, mintha nem lenne szűrés
+                return taskRepository.findAll(sort); // Vagy üres lista: return List.of();
+            }
+        }
     }
 
-    // Megtartjuk az eredeti getAllTasks() metódust az egyszerűség kedvéért, alapértelmezett rendezéssel
+    // Megtartjuk az alapértelmezett getAllTasks() metódust, bár most már a fenti metódus is tud alapértelmezettet kezelni
     public List<Task> getAllTasks() {
-        // Alapértelmezett rendezés ID szerint növekvőben, ha nincs megadva más
-        return taskRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return getAllTasks("all", Sort.by(Sort.Direction.ASC, "id")); // Hívjuk a módosított metódust alapértelmezett értékekkel
     }
 
 
@@ -60,11 +79,11 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    // Javított szűrő a lejárt és közelgő határidőkhöz (itt nem használunk rendezést)
+    // Javított szűrő a lejárt és közelgő határidőkhöz (itt nem használunk felhasználó szűrést vagy rendezést)
     public List<Task> getTasksWithDueDateWarnings() {
         LocalDate currentDate = LocalDate.now();
 
-        return taskRepository.findAll().stream()
+        return taskRepository.findAll().stream() // Esetleg finomíthatnánk ezt is, ha sok feladat van
                 .filter(task -> {
                     if (!task.isCompleted() && task.getDueDate() != null) {
                         long daysUntilDue = task.getDueDate().toEpochDay() - currentDate.toEpochDay();

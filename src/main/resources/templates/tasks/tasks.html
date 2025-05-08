@@ -17,6 +17,22 @@
         <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
+        <div class="filter-section">
+            <form id="task-filter-form" th:action="@{/tasks}" method="get">
+                <label for="user-filter">👤 Filter by User:</label>
+                <select id="user-filter" name="userId" onchange="this.form.submit()">
+                    <option value="" th:selected="${currentUserId == null or currentUserId == ''}">All Users</option>
+                    <option value="unassigned" th:selected="${currentUserId == 'unassigned'}">Unassigned</option>
+                    <option th:each="user : ${users}"
+                            th:value="${user.id}"
+                            th:text="${user.name}"
+                            th:selected="${user.id != null and currentUserId != null and user.id.toString() == currentUserId}">
+                    </option>
+                </select>
+                <input type="hidden" name="sortBy" th:value="${currentSortBy}" />
+                <input type="hidden" name="sortDirection" th:value="${currentSortDirection}" />
+            </form>
+        </div>
         <div class="action-buttons">
             <a href="/tasks/new" class="btn btn-create">➕ Create New Task</a>
             <a href="/users" class="btn btn-manage">👤 Manage Users</a>
@@ -27,31 +43,36 @@
             <table class="styled-table" th:if="${tasks != null and not #lists.isEmpty(tasks)}">
                 <thead>
                 <tr>
-                    <th class="sortable"> <a th:href="@{/tasks(sortBy='id', sortDirection=${currentSortBy == 'id' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
-                        ID
-                        <span th:if="${currentSortBy == 'id'}">
-                                <span th:if="${currentSortDirection == 'asc'}">▲</span> <span th:if="${currentSortDirection == 'desc'}">▼</span> </span>
-                    </a>
-                    </th>
-                    <th>✅</th> <th class="sortable">
-                    <a th:href="@{/tasks(sortBy='title', sortDirection=${currentSortBy == 'title' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
-                        📌 Title
-                        <span th:if="${currentSortBy == 'title'}">
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='id', sortDirection=${currentSortBy == 'id' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
+                            ID
+                            <span th:if="${currentSortBy == 'id'}">
                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
                                 <span th:if="${currentSortDirection == 'desc'}">▼</span>
                             </span>
-                    </a>
-                </th>
+                        </a>
+                    </th>
+                    <th>✅</th>
                     <th class="sortable">
-                        <a th:href="@{/tasks(sortBy='user.name', sortDirection=${currentSortBy == 'user.name' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
-                            👤 Assigned User <span th:if="${currentSortBy == 'user.name'}">
+                        <a th:href="@{/tasks(sortBy='title', sortDirection=${currentSortBy == 'title' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
+                            📌 Title
+                            <span th:if="${currentSortBy == 'title'}">
+                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
+                                 <span th:if="${currentSortDirection == 'desc'}">▼</span>
+                             </span>
+                        </a>
+                    </th>
+                    <th class="sortable">
+                        <a th:href="@{/tasks(sortBy='user.name', sortDirection=${currentSortBy == 'user.name' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
+                            👤 Assigned User
+                            <span th:if="${currentSortBy == 'user.name'}">
                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
                                 <span th:if="${currentSortDirection == 'desc'}">▼</span>
                             </span>
                         </a>
                     </th>
                     <th class="sortable">
-                        <a th:href="@{/tasks(sortBy='status', sortDirection=${currentSortBy == 'status' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        <a th:href="@{/tasks(sortBy='status', sortDirection=${currentSortBy == 'status' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
                             📈 Status
                             <span th:if="${currentSortBy == 'status'}">
                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
@@ -60,7 +81,7 @@
                         </a>
                     </th>
                     <th class="sortable">
-                        <a th:href="@{/tasks(sortBy='dueDate', sortDirection=${currentSortBy == 'dueDate' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        <a th:href="@{/tasks(sortBy='dueDate', sortDirection=${currentSortBy == 'dueDate' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
                             📅 Due Date
                             <span th:if="${currentSortBy == 'dueDate'}">
                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
@@ -69,7 +90,7 @@
                         </a>
                     </th>
                     <th class="sortable">
-                        <a th:href="@{/tasks(sortBy='priority', sortDirection=${currentSortBy == 'priority' and currentSortDirection == 'asc' ? 'desc' : 'asc'})}">
+                        <a th:href="@{/tasks(sortBy='priority', sortDirection=${currentSortBy == 'priority' and currentSortDirection == 'asc' ? 'desc' : 'asc'}, userId=${currentUserId})}">
                             ⚡ Priority
                             <span th:if="${currentSortBy == 'priority'}">
                                 <span th:if="${currentSortDirection == 'asc'}">▲</span>
@@ -77,7 +98,8 @@
                             </span>
                         </a>
                     </th>
-                    <th>⚙️ Actions</th> </tr>
+                    <th>⚙️ Actions</th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}"
@@ -85,14 +107,18 @@
                               ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'} +
                               (${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) and !task.completed ? ' due-warning' : ''}) +
                               (${task.completed ? ' completed-task' : ''})"
-                    th:data-task-id="${task.id}"> <td th:text="${task.id}">1</td>
-                    <td> <input
-                            type="checkbox"
-                            th:checked="${task.completed}"
-                            class="task-completed-checkbox"
-                    />
+                    th:data-task-id="${task.id}">
+                    <td th:text="${task.id}">1</td>
+                    <td>
+                        <input
+                                type="checkbox"
+                                th:checked="${task.completed}"
+                                class="task-completed-checkbox"
+                        />
                     </td>
-                    <td th:text="${task.title}">Task Title</td>
+                    <td>
+                        <a th:href="@{/tasks/view/{id}(id=${task.id})}" th:text="${task.title}" class="task-title-link"></a>
+                    </td>
                     <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>
                     <td>
                         <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
@@ -110,7 +136,8 @@
                     </td>
                     <td>
                         <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
-                        <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;">
+                        <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;"
+                              onsubmit="return confirm('Biztosan törölni szeretnéd ezt a feladatot?');">
                             <input type="hidden" name="_method" value="DELETE"/>
                             <button type="submit" class="btn-delete">🗑️ Delete</button>
                         </form>
@@ -131,7 +158,6 @@
 
             checkboxes.forEach(checkbox => {
                 checkbox.addEventListener('change', function () {
-                    // A feladat ID-t most a sor elemből olvassuk ki
                     const row = this.closest('.task-row');
                     const taskId = row.dataset.taskId;
                     const isCompleted = this.checked;
@@ -154,31 +180,21 @@
                                 if (isCompleted) {
                                     row.classList.add('completed-task');
                                     // Optional: Update Status text to '✅ Completed'
-                                    const statusCell = row.querySelector('td:nth-child(5) span'); // Select the span inside the 5th td
+                                    const statusCell = row.querySelector('td:nth-child(5) span');
                                     if (statusCell) {
-                                        statusCell.className = 'status-COMPLETED'; // Update class
-                                        statusCell.textContent = '✅ Completed'; // Update text
+                                        statusCell.className = 'status-COMPLETED';
+                                        statusCell.textContent = '✅ Completed';
                                     }
                                     // Remove due-warning class if completed
                                     row.classList.remove('due-warning');
 
                                 } else {
                                     row.classList.remove('completed-task');
-                                    // Optional: Update Status text back (this requires knowing the original status, which is complex here)
-                                    // For simplicity, the status text might not revert perfectly without more data
-                                    // Or you could refetch the task row content, but that's heavier.
-                                    // A simple approach is to let the CSS handle the status text color based on the enum name class.
-                                    // The current switch statement in Thymeleaf already uses classes like status-PENDING etc.
-                                    // The CSS for completed-task overrides these colors, so removing completed-task class should bring back the original status color.
-                                    // We don't auto-add 'due-warning' back here, that will show on next page load if applicable.
-
-                                    // A status cell text update is tricky. Let's remove the specific text update logic
-                                    // and rely only on the status enum name class for coloring/styling.
                                     const statusSpan = row.querySelector('td:nth-child(5) span');
-                                    if (statusSpan && statusSpan.classList.contains('status-COMPLETED')) {
-                                        // If it was completed, we can try to guess the original status
-                                        // but it's unreliable. Best to let page reload or more complex JS handle this.
-                                        // For now, we just remove the completed class and rely on CSS for other statuses.
+                                    if (statusSpan) {
+                                        // Simple revert to PENDING text/class - adjust if needed
+                                        statusSpan.className = 'status-PENDING';
+                                        statusSpan.textContent = '📌 Pending';
                                     }
                                 }
                             }
@@ -186,7 +202,7 @@
                         .catch(error => {
                             console.error('Error:', error);
                             alert('An error occurred while updating task status.');
-                            this.checked = !isCompleted; // Revert checkbox state on network error
+                            this.checked = !isCompleted;
                         });
                 });
             });

@@ -29,9 +29,16 @@
 
     --table-button-gap: 8px; /* Gap specifically for buttons in table cells */
 
-    /* ÚJ: Szín a completed feladatok szövegéhez */
+    /* Stílus változók a completed feladatokhoz */
     --completed-text-color: #7F8C8D; /* Ugyanaz, mint light-text-color */
     --completed-bg-color: #e9e9eb; /* Nagyon világos szürke */
+
+    /* Stílus változók a szűrő elemekhez */
+    --filter-bg: #EBF5FB; /* Nagyon világos kék háttér a szűrőnek */
+    --filter-border: #AED6F1; /* Világos kék szegély */
+
+    /* Stílus változó a leírás háttérhez */
+    --description-bg: #F8F9FA; /* Very light grey */
 }
 
 /* --- Global Styles --- */
@@ -150,47 +157,82 @@ body.welcome-page .action-buttons {
 }
 
 
-/* --- Form Layout --- */
+/* --- Filter Section Styles --- */
+.filter-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: var(--filter-bg);
+    border: 1px solid var(--filter-border);
+    border-radius: var(--border-radius-medium);
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Vertically center items */
+    gap: 15px; /* Space between label and select */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0; /* Remove default margin */
+}
+
+.filter-section select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color-dark); /* assumed border-color-dark is defined or use a hex */
+    border-radius: var(--border-radius-small);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border-color var(--transition-speed-fast), box-shadow var(--transition-speed-fast);
+}
+
+.filter-section select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.4);
+    outline: none;
+}
+
+
+/* --- Form Layout (for Create/Edit) --- */
 .form-layout {
     display: grid;
-    grid-template-columns: 1fr 2fr; /* Label on left (1 part), input on right (2 parts) */
-    gap: 1.5rem; /* Space between rows and columns */
-    align-items: center; /* Vertically align items */
-    max-width: 800px; /* Limit form width */
-    margin: 0 auto 2rem auto; /* Center form and add bottom margin */
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
     padding: 2rem;
-    background: var(--bg-color); /* Light background for form area */
+    background: var(--bg-color);
     border-radius: var(--border-radius-medium);
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.08); /* More defined inner shadow */
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .form-layout label {
-    font-weight: 600; /* Slightly lighter bold */
+    font-weight: 600;
     color: var(--text-color);
-    text-align: right; /* Align labels to the right */
-    padding-right: 15px; /* Space between label and input */
-    display: block; /* Ensure label takes full width in its cell */
-    white-space: nowrap; /* Prevent label text from wrapping */
+    text-align: right;
+    padding-right: 15px;
+    display: block;
+    white-space: nowrap;
 }
 
 .form-layout input[type="text"],
 .form-layout input[type="date"],
 .form-layout select {
-    width: 100%; /* Full width within its grid cell */
-    padding: 0.9rem; /* Slightly more padding */
-    border: 1px solid var(--border-color-dark);
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid var(--border-color-dark); /* assumed border-color-dark is defined or use a hex */
     border-radius: var(--border-radius-small);
     font-size: 1rem;
     transition: border-color var(--transition-speed-normal), box-shadow var(--transition-speed-normal);
-    background-color: white; /* Explicitly white background */
+    background-color: white;
 }
 
 .form-layout input[type="checkbox"] {
     width: auto;
-    justify-self: start; /* Align to the start of the grid cell */
-    margin-left: 10px; /* Add space from label */
-    accent-color: var(--accent-color); /* Style checkbox */
-    transform: scale(1.3); /* Slightly larger checkbox */
+    justify-self: start;
+    margin-left: 10px;
+    accent-color: var(--accent-color);
+    transform: scale(1.3);
     cursor: pointer;
 }
 
@@ -198,13 +240,13 @@ body.welcome-page .action-buttons {
 .form-layout input[type="date"]:focus,
 .form-layout select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 10px rgba(74, 144, 226, 0.6); /* More prominent focus shadow */
-    outline: none; /* Remove default outline */
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.6);
+    outline: none;
 }
 
 .form-layout input[type="text"]::placeholder,
 .form-layout input[type="date"]::placeholder {
-    color: var(--light-text-color); /* Style placeholder text */
+    color: var(--light-text-color);
     font-style: italic;
 }
 
@@ -212,39 +254,39 @@ body.welcome-page .action-buttons {
 /* Make the action buttons span two columns in the grid */
 .form-layout .action-buttons {
     grid-column: span 2;
-    text-align: center; /* Center the buttons */
-    margin-top: 1rem; /* Space above buttons within form */
+    text-align: center;
+    margin-top: 1rem;
 }
 
 /* --- Button Styles --- */
 /* General button container/layout */
 .action-buttons {
     display: flex;
-    justify-content: center; /* Center the button group */
-    gap: 15px; /* Space between buttons */
-    flex-wrap: wrap; /* Allow buttons to wrap */
-    margin-top: 20px; /* Space above button group */
-    margin-bottom: 20px; /* Space below button group */
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 /* Base button style - Applied to .btn class */
 .btn {
     display: inline-flex;
     align-items: center;
-    justify-content: center; /* Center content within button */
-    gap: 8px; /* Space between icon and text */
-    padding: 0.8rem 1.8rem; /* More padding */
-    border-radius: var(--border-radius-large); /* Pill shape */
+    justify-content: center;
+    gap: 8px;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--border-radius-large);
     text-decoration: none;
-    font-weight: 600; /* Slightly bolder text */
+    font-weight: 600;
     transition: all var(--transition-speed-normal);
     cursor: pointer;
     border: none;
     box-shadow: var(--shadow-small);
-    font-size: 1.05rem; /* Slightly larger font */
-    min-width: 140px; /* Ensure minimum width */
-    position: relative; /* Needed for potential effects */
-    overflow: hidden; /* Hide overflow from effects */
+    font-size: 1.05rem;
+    min-width: 140px;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Add a subtle ripple effect on click */
@@ -255,7 +297,7 @@ body.welcome-page .action-buttons {
     left: 50%;
     width: 5px;
     height: 5px;
-    background: rgba(255, 255, 255, 0.3); /* White ripple */
+    background: rgba(255, 255, 255, 0.3);
     opacity: 0;
     border-radius: 100%;
     transform: scale(1);
@@ -276,176 +318,188 @@ body.welcome-page .action-buttons {
 
 /* Hover and Active states for all buttons */
 .btn:hover {
-    transform: translateY(-4px); /* More pronounced lift effect */
+    transform: translateY(-4px);
     box-shadow: var(--shadow-medium);
 }
 
 .btn:active {
-    transform: translateY(-1px); /* Press effect */
+    transform: translateY(-1px);
     box-shadow: var(--shadow-small);
 }
 
 /* Specific Button Colors */
 .btn-edit {
-    background: var(--accent-color); /* Green */
+    background: var(--accent-color);
     color: white;
 }
 
 .btn-edit:hover {
-    background: #28a745; /* Slightly darker green */
+    background: #28a745;
 }
 
 .btn-delete {
-    background: var(--error-color); /* Red */
+    background: var(--error-color);
     color: white;
 }
 
 .btn-delete:hover {
-    background: #c0392b; /* Slightly darker red */
+    background: #c0392b;
 }
 
 .btn-create {
-    background: var(--success-color); /* Success Green */
+    background: var(--success-color);
     color: white;
 }
 
 .btn-create:hover {
-    background: #218838; /* Slightly darker success green */
+    background: #218838;
 }
 
 .btn-manage {
-    background: var(--secondary-color); /* Grey */
+    background: var(--secondary-color);
     color: white;
 }
 
 .btn-manage:hover {
-    background: #495765; /* Slightly darker grey */
+    background: #495765;
 }
 
 .btn-warning {
-    background: var(--warning-color); /* Orange */
+    background: var(--warning-color);
     color: white;
 }
 
 .btn-warning:hover {
-    background: #e08e0b; /* Slightly darker warning orange */
+    background: #e08e0b;
 }
 
 
 /* --- Table Styles --- */
 .styled-table {
     width: 100%;
-    border-collapse: collapse; /* Remove space between borders */
-    margin: 25px 0; /* Space above and below table */
-    font-size: 0.95em; /* Slightly larger font */
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.95em;
     min-width: 400px;
     box-shadow: var(--shadow-medium);
     border-radius: var(--border-radius-medium);
-    overflow: hidden; /* Ensure border-radius applies */
-    border: 1px solid var(--border-color-light); /* Outer border */
+    overflow: hidden;
+    border: 1px solid var(--border-color-light); /* assumed border-color-light is defined or use a hex */
 }
 
 .styled-table thead tr {
     background-color: var(--primary-color);
     color: white;
     text-align: left;
-    font-weight: 700; /* Bolder header text */
+    font-weight: 700;
 }
 
 /* Style for sortable table headers */
 .styled-table th.sortable {
-    cursor: pointer; /* Indicate that the header is clickable */
+    cursor: pointer;
 }
 
 .styled-table th.sortable a {
-    color: inherit; /* Inherit color from th */
-    text-decoration: none; /* Remove underline */
-    display: flex; /* Use flexbox to align text and icon */
+    color: inherit;
+    text-decoration: none;
+    display: flex;
     align-items: center;
-    gap: 5px; /* Space between text and icon */
+    gap: 5px;
 }
 
 .styled-table th.sortable a:hover {
-    text-decoration: underline; /* Add underline on hover for clickability */
+    text-decoration: underline;
 }
 
 /* Style for sort indicator arrows (▲ / ▼) */
 .styled-table th.sortable a span {
-    font-size: 0.8em; /* Smaller arrow size */
-    color: rgba(255, 255, 255, 0.8); /* Slightly transparent white */
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 
 .styled-table th,
 .styled-table td {
     padding: 12px 15px;
-    border-bottom: 1px solid var(--border-color-light); /* Horizontal borders */
-    vertical-align: middle; /* Vertically center content */
+    border-bottom: 1px solid var(--border-color-light); /* assumed border-color-light is defined or use a hex */
+    vertical-align: middle;
 }
 
 /* Alternating row colors for readability */
 .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f8f9fa; /* Very light grey */
+    background-color: #f8f9fa;
 }
 
 /* Hover effect on table rows */
 .styled-table tbody tr:hover {
-    background-color: #e9ecef; /* Light background on hover */
-    transform: scale(1.005); /* Subtle zoom effect */
+    background-color: #e9ecef;
+    transform: scale(1.005);
     transition: background-color var(--transition-speed-normal), transform 0.1s ease-in-out;
 }
 
 /* Specific styling for warning rows (e.g., upcoming due date) */
 .styled-table tbody tr.due-warning {
-    background-color: #ffeeba; /* Light yellow background for warnings */
-    color: #665d45; /* Darker text color for readability */
+    background-color: #ffeeba;
+    color: #665d45;
     font-weight: 600;
 }
 
 /* --- Style for completed task rows --- */
 .styled-table tbody tr.completed-task {
-    text-decoration: line-through; /* Strikethrough text */
-    color: var(--completed-text-color); /* Fade text color using completed variable */
-    opacity: 0.8; /* Slightly reduce opacity */
-    background-color: var(--completed-bg-color); /* Light grey background using completed variable */
-    transition: all var(--transition-speed-normal); /* Smooth transition */
+    text-decoration: line-through;
+    color: var(--completed-text-color);
+    opacity: 0.8;
+    background-color: var(--completed-bg-color);
+    transition: all var(--transition-speed-normal);
 }
 
-/* Ensure specific elements within completed rows are NOT affected by strikethrough/fading */
-.styled-table tbody tr.completed-task td {
-    /* Ensure cell content is not faded *unless* it's the primary text */
-    /* This might require more specific targeting or adjusting the .completed-task rule */
-    /* A simpler approach is to apply strikethrough only to the title/description cells if they exist */
-    /* Let's try to target specific cells or children within the cell */
-    color: inherit; /* Revert to the faded row color by default */
-    text-decoration: none; /* Ensure no strikethrough on the cell itself */
-}
-
-/* Apply strikethrough specifically to the Task Title and Description cells if they existed */
-/* Assuming Task Title is in the 3rd column (index 2, if 0-indexed) */
-.styled-table tbody tr.completed-task td:nth-child(3) {
+/* Apply strikethrough specifically to the Task Title and Assigned User cells */
+/* Assuming Task Title is in the 3rd column (index 2) and Assigned User is in the 4th (index 3) after the checkbox */
+.styled-table tbody tr.completed-task td:nth-child(3), /* Title */
+.styled-table tbody tr.completed-task td:nth-child(4) /* Assigned User */
+{
     text-decoration: line-through;
 }
-/* If you had a description column, target it similarly */
-/* .styled-table tbody tr.completed-task td:nth-child(X) { text-decoration: line-through; } */
 
 
+/* Ensure specific elements within completed rows are NOT affected by strikethrough/fading */
 .styled-table tbody tr.completed-task td .btn-edit,
 .styled-table tbody tr.completed-task td .btn-delete,
 .styled-table tbody tr.completed-task td form button,
 .styled-table tbody tr.completed-task td input[type="checkbox"],
-.styled-table tbody tr.completed-task .status-PENDING, /* Ensure status colors/spans are not affected */
+.styled-table tbody tr.completed-task .status-PENDING,
 .styled-table tbody tr.completed-task .status-IN_PROGRESS,
 .styled-table tbody tr.completed-task .status-COMPLETED,
 .styled-table tbody tr.completed-task .status-UNKNOWN,
-.styled-table tbody tr.completed-task .priority-LOW, /* Ensure priority colors/spans are not affected */
+.styled-table tbody tr.completed-task .priority-LOW,
 .styled-table tbody tr.completed-task .priority-MEDIUM,
 .styled-table tbody tr.completed-task .priority-HIGH {
-    text-decoration: none; /* Remove strikethrough */
-    opacity: 1; /* Reset opacity */
-    color: inherit; /* Inherit color from their own specific rules (status/priority colors), not the faded row color */
-    /* If status/priority colors still look too faded, you might need to explicitly set their color back: */
-    /* color: var(--warning-color); etc. - but 'inherit' should work if their original rules have higher specificity */
+    text-decoration: none;
+    opacity: 1;
+    color: inherit;
+}
+
+/* Style for the task title link in the table to look like regular text */
+.styled-table td .task-title-link {
+    color: var(--text-color); /* Use the standard text color */
+    text-decoration: none; /* Remove underline */
+    font-weight: normal; /* Standard font weight */
+    transition: color var(--transition-speed-fast);
+}
+
+.styled-table tbody tr.completed-task td .task-title-link {
+    color: inherit; /* Inherit the completed row's faded color */
+}
+
+
+.styled-table td .task-title-link:hover {
+    text-decoration: underline; /* Add underline on hover */
+    color: var(--primary-color); /* Change color on hover */
+}
+
+.styled-table tbody tr.completed-task td .task-title-link:hover {
+    color: var(--completed-text-color); /* Keep the faded color on hover in completed rows */
+    text-decoration: none; /* No underline on hover for completed tasks */
 }
 
 
@@ -463,44 +517,99 @@ body.welcome-page .action-buttons {
 
 
 /* Style for action buttons within table cells container */
-.styled-table td:last-child { /* Apply flexbox to the last cell */
+.styled-table td:last-child {
     display: flex;
-    align-items: center; /* Vertically center buttons */
-    gap: var(--table-button-gap); /* Add gap between buttons */
+    align-items: center;
+    gap: var(--table-button-gap);
 }
 
 /* Style for action buttons within table cells */
-/* These rules ensure Edit and Delete buttons in tables look similar in size/shape */
 .styled-table td .btn-edit,
 .styled-table td .btn-delete,
-.styled-table td form button { /* Also target the button inside the form */
-    padding: 0.4rem 0.8rem; /* Smaller padding for table buttons */
+.styled-table td form button {
+    padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
-    border-radius: var(--border-radius-medium); /* Slightly less rounded */
-    box-shadow: none; /* No shadow on table buttons */
-    transform: none; /* No transform on table buttons */
+    border-radius: var(--border-radius-medium);
+    box-shadow: none;
+    transform: none;
     transition: background-color var(--transition-speed-normal), opacity var(--transition-speed-normal);
-    min-width: auto; /* Remove min-width constraint */
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-    /* Specific background colors and hover effects are handled by their individual classes (.btn-edit, .btn-delete) */
+    min-width: auto;
+    flex-shrink: 0;
 }
 
 /* Ensure delete button form is inline and doesn't add extra margin */
 .styled-table td form {
-    display: contents; /* Use contents to not create a box, allowing gap on parent (td) */
+    display: contents;
 }
 
 /* Explicitly ensure hover styles are simple for table buttons */
 .styled-table td .btn-edit:hover {
-    background-color: #28a745; /* Darker green */
+    background-color: #28a745;
     opacity: 0.9;
 }
 
 .styled-table td .btn-delete:hover,
-.styled-table td form button:hover { /* Apply hover to button inside form too */
-    background-color: #c0392b; /* Darker red */
+.styled-table td form button:hover {
+    background-color: #c0392b;
     opacity: 0.9;
-    animation: none; /* Ensure no animation on hover */
+    animation: none;
+}
+
+
+/* --- ÚJ: Stílus a Feladat Részletek oldalhoz --- */
+.task-details {
+    margin-top: 30px;
+    padding: 30px;
+    background: var(--card-bg-color); /* Fehér háttér */
+    border-radius: var(--border-radius-medium);
+    box-shadow: var(--shadow-medium);
+}
+
+.task-details h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--bg-color); /* Finom elválasztó */
+    padding-bottom: 10px;
+}
+
+.detail-item {
+    margin-bottom: 15px;
+}
+
+.detail-item strong {
+    display: inline-block;
+    width: 150px; /* Fix szélesség a címkéknek */
+    color: var(--text-color);
+    font-weight: 600;
+    margin-right: 10px; /* Hely a címke és az érték között */
+}
+
+.detail-item span {
+    color: var(--secondary-color); /* Kicsit halványabb szín az értékeknek */
+}
+
+/* Stílus a leírás <pre> tagjének */
+.detail-item pre {
+    white-space: pre-wrap; /* Többsoros szöveg törése */
+    word-wrap: break-word;
+    background-color: var(--description-bg); /* Világos háttér */
+    padding: 10px;
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--bg-color); /* Szegély a háttér színével */
+    color: var(--text-color);
+    margin-top: 5px; /* Hely a "Description:" címke alatt */
+    font-family: inherit; /* Használja a globális betűtípust */
+    font-size: inherit; /* Használja a globális betűméretet */
+}
+
+
+.details-actions {
+    margin-top: 30px;
+    border-top: 1px solid var(--bg-color); /* Elválasztó vonal a gombok felett */
+    padding-top: 20px;
+    display: flex;
+    gap: 15px; /* Hely a gombok között */
+    flex-wrap: wrap; /* Gombok törése kicsi képernyőn */
 }
 
 
@@ -508,13 +617,13 @@ body.welcome-page .action-buttons {
 .no-tasks {
     text-align: center;
     font-size: 1.5rem;
-    color: var(--secondary-color); /* Use secondary color for softer look */
-    padding: 3rem; /* More padding */
-    background: var(--card-bg-color); /* White background */
-    border: 2px dashed var(--border-color-light); /* Dashed border */
+    color: var(--secondary-color);
+    padding: 3rem;
+    background: var(--card-bg-color);
+    border: 2px dashed var(--border-color-light); /* assumed border-color-light is defined or use a hex */
     border-radius: var(--border-radius-medium);
     box-shadow: var(--shadow-small);
-    margin-top: 40px; /* Space above */
+    margin-top: 40px;
     font-style: italic;
     line-height: 1.5;
 }
@@ -534,13 +643,19 @@ body.welcome-page .action-buttons {
         padding: 30px;
     }
 
+    .filter-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
     .form-layout {
         gap: 1rem;
         padding: 1.5rem;
     }
 
     .form-layout label {
-        padding-right: 10px; /* Adjust label padding */
+        padding-right: 10px;
     }
 
     .styled-table {
@@ -563,49 +678,55 @@ body.welcome-page .action-buttons {
     .styled-table td form button {
         padding: 0.35rem 0.7rem;
         font-size: 0.8rem;
-        gap: 4px; /* Smaller gap */
+        gap: 4px;
     }
     .styled-table td:last-child {
-        gap: 6px; /* Adjust flex gap */
+        gap: 6px;
     }
+
+    /* Responsive for Task Details */
+    .detail-item strong {
+        width: 120px; /* Kisebb szélesség kisebb képernyőn */
+    }
+
 }
 
 
 @media (max-width: 768px) {
     /* Stack form elements */
     .form-layout {
-        grid-template-columns: 1fr; /* Stack labels and inputs */
-        gap: 1rem; /* Adjust gap */
+        grid-template-columns: 1fr;
+        gap: 1rem;
         padding: 1rem;
     }
 
     .form-layout label {
-        text-align: left; /* Align labels to left when stacked */
+        text-align: left;
         padding-right: 0;
-        margin-bottom: 5px; /* Space below label when stacked */
-        white-space: normal; /* Allow labels to wrap */
+        margin-bottom: 5px;
+        white-space: normal;
     }
 
     .form-layout input[type="checkbox"] {
-        justify-self: center; /* Center checkbox when stacked */
+        justify-self: center;
         margin-left: 0;
     }
 
     /* Action buttons span only one column when stacked */
     .form-layout .action-buttons {
         grid-column: span 1;
-        flex-direction: column; /* Stack buttons */
-        align-items: center; /* Center stacked buttons */
+        flex-direction: column;
+        align-items: center;
         gap: 10px;
         margin-top: 15px;
     }
 
     /* Make stacked form buttons wider */
     .form-layout .action-buttons .btn {
-        width: 90%; /* Make buttons take up more width */
-        max-width: 300px; /* Max width for stacked buttons */
-        justify-content: center; /* Center content in stacked buttons */
-        padding: 0.8rem 1.5rem; /* Adjust padding */
+        width: 90%;
+        max-width: 300px;
+        justify-content: center;
+        padding: 0.8rem 1.5rem;
     }
 
 
@@ -640,7 +761,7 @@ body.welcome-page .action-buttons {
         width: 90%;
         max-width: 300px;
         justify-content: center;
-        padding: 0.8rem 1.5rem; /* Adjust padding */
+        padding: 0.8rem 1.5rem;
     }
 
     /* Adjust empty state text size */
@@ -655,12 +776,31 @@ body.welcome-page .action-buttons {
     .styled-table td form button {
         padding: 0.3rem 0.6rem;
         font-size: 0.8rem;
-        gap: 2px; /* Smaller gap */
+        gap: 2px;
         min-width: auto;
     }
     .styled-table td:last-child {
-        gap: 4px; /* Adjust flex gap */
+        gap: 4px;
     }
+
+    /* Responsive for Task Details */
+    .detail-item strong {
+        display: block; /* Stack labels and values */
+        width: auto;
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    .details-actions {
+        flex-direction: column; /* Stack buttons */
+        align-items: center;
+        gap: 10px;
+    }
+    .details-actions .btn {
+        width: 90%; /* Make buttons wider */
+        max-width: 300px;
+        justify-content: center;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -682,7 +822,7 @@ body.welcome-page .action-buttons {
     /* Further adjust stacked form button width */
     .form-layout .action-buttons .btn {
         width: 95%;
-        padding: 0.7rem 1.2rem; /* Further adjust padding */
+        padding: 0.7rem 1.2rem;
     }
 
     /* Adjust table font size */
@@ -698,7 +838,7 @@ body.welcome-page .action-buttons {
     /* Further adjust general action button width */
     .action-buttons .btn {
         width: 95%;
-        padding: 0.7rem 1.2rem; /* Further adjust padding */
+        padding: 0.7rem 1.2rem;
     }
 
     /* Smallest table button size and gap */
@@ -707,9 +847,17 @@ body.welcome-page .action-buttons {
     .styled-table td form button {
         padding: 0.2rem 0.5rem;
         font-size: 0.7rem;
-        gap: 1px; /* Smallest gap */
+        gap: 1px;
     }
     .styled-table td:last-child {
-        gap: 2px; /* Adjust flex gap */
+        gap: 2px;
+    }
+
+    /* Responsive for Task Details */
+    .task-details {
+        padding: 15px; /* Kisebb padding */
+    }
+    .detail-item {
+        margin-bottom: 10px; /* Kisebb hely itemek között */
     }
 }
