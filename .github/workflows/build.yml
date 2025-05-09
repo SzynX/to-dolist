@@ -65,7 +65,7 @@ jobs:
       - name: Install JFrog CLI
         uses: jfrog/setup-jfrog-cli@v1
         with:
-          version: 'latest'
+          version: '2.41.0'
 
       # 7. Artifactory feltöltés (nem hitelesített példa)
       - name: Configure JFrog CLI (no auth)
