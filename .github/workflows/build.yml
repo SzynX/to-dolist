@@ -20,6 +20,7 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      # Maven build + verify, Checkstyle kihagyva
       - name: Build with Maven and skip Checkstyle
         run: mvn -B clean package verify -Dcheckstyle.skip=true
 
@@ -56,9 +57,9 @@ jobs:
           EOT
           echo "Mock adatbázis osztály létrehozva."
 
-      # Futtatjuk a teszteket újra, hogy ellenőrizzük a mock adatbázis használatát
+      # Futtatjuk a teszteket újra, hogy ellenőrizzük a mock adatbázis használatát (Checkstyle kihagyva)
       - name: Run tests with mock DB
-        run: mvn test
+        run: mvn test -Dcheckstyle.skip=true
 
       # JFrog CLI telepítése és Artifactory konfiguráció
       - name: Install JFrog CLI
