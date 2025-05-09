@@ -4,11 +4,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ToDoListApplicationTests {
+public class TodoListApplicationTest {
 
 	@Test
 	void contextLoads() {
-		// Teszteli, hogy az alkalmazás kontextusa sikeresen betöltődik.
+	}
+
+	@Test
+	void mainMethodTest() {
+
+		String[] args = {};
+		TodoListApplication.main(args);
 	}
 }
-
