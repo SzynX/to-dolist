@@ -61,20 +61,14 @@ jobs:
       - name: Run tests with mock DB
         run: mvn test -Dcheckstyle.skip=true
 
-      # 6. JFrog CLI telepítése és Artifactory konfiguráció (nem hitelesített)
+      # 6. JFrog CLI telepítése (legfrissebb stabil verzió)
       - name: Install JFrog CLI
         uses: jfrog/setup-jfrog-cli@v1
         with:
-          version: '2.41.0'
+          version: '2.75.1'  # A legfrissebb stabil verzió, ami támogatja az új szintaxist
 
-      # 7. Artifactory feltöltés (nem hitelesített példa)
-      - name: Configure JFrog CLI (no auth)
-        run: |
-          # Csak akkor működik, ha az Artifactory nem igényel hitelesítést
-          jfrog rt config --url https://my-artifactory.example.com/artifactory 
-
-      # 8. JAR fájl feltöltése az Artifactory-ba
-      - name: Upload artifact to Artifactory
+      # 7. Artifactory feltöltés (nélkülözve hitelesítést)
+      - name: Upload artifact to Artifactory (no auth)
         run: |
           JAR_PATH=$(find target -name "*.jar" | head -n1)
           if [ -z "$JAR_PATH" ]; then
@@ -83,5 +77,6 @@ jobs:
           fi
           ARTIFACT_NAME=$(basename $JAR_PATH)
           REPO_PATH="libs-release-local/org/example/to-dolist/$(date +'%Y%m%d')/$ARTIFACT_NAME"
-          jfrog rt u "$JAR_PATH" "$REPO_PATH"
-          echo "Feltöltve az Artifactory-ba: $REPO_PATH"
+          
+          # Feltöltés az Artifactory-ba (nélkülözve konfigurációt)
+          jfrog rt u "$JAR_PATH" "$REPO_PATH" --url ${{ secrets.ARTIFACTORY_URL }}
