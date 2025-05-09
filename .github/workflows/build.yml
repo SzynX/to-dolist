@@ -23,8 +23,8 @@ jobs:
           distribution: 'temurin'
 
       # 3. Maven build + tesztek, Checkstyle kihagyva
-      - name: Build with Maven and skip Checkstyle
-        run: mvn -B clean package -Dcheckstyle.skip=true
+      - name: Build and Test with Checkstyle skip
+        run: mvn -B verify -Dcheckstyle.skip=true
 
       # 4. In-memory mock adatbázis létrehozása (ArrayList alapú)
       - name: Mock DB Setup (ArrayList-based)
@@ -61,22 +61,18 @@ jobs:
       - name: Run tests with mock DB
         run: mvn test -Dcheckstyle.skip=true
 
-      # 6. JFrog CLI telepítése (legfrissebb stabil verzió)
-      - name: Install JFrog CLI
-        uses: jfrog/setup-jfrog-cli@v1
+      # 6. Jacoco lefedettségi jelentés feltöltése (mindig, sikeres vagy sikertelen build esetén is)
+      - name: Upload Jacoco Test Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          version: '2.75.1'  # A legfrissebb stabil verzió, ami támogatja az új szintaxist
+          name: jacoco-report
+          path: target/site/jacoco
 
-      # 7. Artifactory feltöltés (nélkülözve hitelesítést)
-      - name: Upload artifact to Artifactory (no auth)
-        run: |
-          JAR_PATH=$(find target -name "*.jar" | head -n1)
-          if [ -z "$JAR_PATH" ]; then
-            echo "Nem található JAR fájl!"
-            exit 1
-          fi
-          ARTIFACT_NAME=$(basename $JAR_PATH)
-          REPO_PATH="libs-release-local/org/example/to-dolist/$(date +'%Y%m%d')/$ARTIFACT_NAME"
-          
-          # Feltöltés az Artifactory-ba (nélkülözve konfigurációt)
-          jfrog rt u "$JAR_PATH" "$REPO_PATH" --url ${{ secrets.ARTIFACTORY_URL }}
+      # 7. Buildelt JAR fájl feltöltése (mindig, sikeres vagy sikertelen build esetén is)
+      - name: Upload Built Jar Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
