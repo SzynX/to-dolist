@@ -20,5 +20,68 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build and Test with Checkstyle skip
-        run: mvn -B verify -Dcheckstyle.skip=true
+      - name: Build with Maven and skip Checkstyle
+        run: mvn -B clean package verify -Dcheckstyle.skip=true
+
+      # In-memory mock adatbázis szimuláció (opcionális, ha a tesztek ezt használják)
+      - name: Mock DB Setup (ArrayList-based)
+        run: |
+          echo "In-memory mock DB használata: az alkalmazás tesztjei már használhatnak ArrayList alapú adattárolást"
+          echo "Pl.: TaskServiceTest.java-ban például egy sima List<Task> használható mock adatbázisként"
+          # Egy egyszerű példa arra, hogy hogyan lehet egy ArrayList-t mock adatbázisként használni
+          mkdir -p src/test/java/org/example/to_dolist/mockdb
+          cat <<EOT > src/test/java/org/example/to_dolist/mockdb/MockTaskDB.java
+          package org.example.to_dolist.mockdb;
+
+          import org.example.to_dolist.domain.Task;
+          import java.util.ArrayList;
+          import java.util.List;
+          import java.util.UUID;
+
+          public class MockTaskDB {
+              private List<Task> tasks = new ArrayList<>();
+
+              public void addTask(Task task) {
+                  tasks.add(task);
+              }
+
+              public Task getTaskById(UUID id) {
+                  return tasks.stream().filter(t -> t.getId().equals(id)).findFirst().orElse(null);
+              }
+
+              public List<Task> getAllTasks() {
+                  return tasks;
+              }
+          }
+          EOT
+          echo "Mock adatbázis osztály létrehozva."
+
+      # Futtatjuk a teszteket újra, hogy ellenőrizzük a mock adatbázis használatát
+      - name: Run tests with mock DB
+        run: mvn test
+
+      # JFrog CLI telepítése és Artifactory konfiguráció
+      - name: Install JFrog CLI
+        run: |
+          curl -fL https://getcli.jfrog.io  | sh
+          chmod +x jfrog
+          sudo mv jfrog /usr/local/bin/
+
+      - name: Configure JFrog CLI
+        run: |
+          ./jfrog rt config --url ${{ secrets.ARTIFACTORY_URL }} --user ${{ secrets.ARTIFACTORY_USER }} --password ${{ secrets.ARTIFACTORY_API_KEY }}
+        env:
+          JFROG_CLI_LOG_LEVEL: DEBUG
+
+      # JAR fájl feltöltése az Artifactory-ba
+      - name: Upload artifact to Artifactory
+        run: |
+          JAR_PATH=$(find target -name "*.jar" | head -n1)
+          if [ -z "$JAR_PATH" ]; then
+            echo "No JAR file found to upload!"
+            exit 1
+          fi
+          ARTIFACT_NAME=$(basename $JAR_PATH)
+          REPO_PATH="libs-release-local/org/example/to-dolist/$(date +'%Y%m%d')/$ARTIFACT_NAME"
+          ./jfrog rt u "$JAR_PATH" "$REPO_PATH"
+          echo "Uploaded artifact to Artifactory: $REPO_PATH"
