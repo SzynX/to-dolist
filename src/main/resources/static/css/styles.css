@@ -1,4 +1,3 @@
-/* --- Variables --- */
 :root {
     --primary-color: #4A90E2;
     --secondary-color: #5D6D7E;
@@ -27,7 +26,7 @@
     --transition-speed-fast: 0.2s ease-out;
     --transition-speed-normal: 0.3s ease-in-out;
 
-    --table-button-gap: 6px; /* Kicsit kisebb alapértelmezett rés a gombok között */
+    --table-button-gap: 8px;
 
     --completed-text-color: #7F8C8D;
     --completed-bg-color: #e9e9eb;
@@ -45,14 +44,12 @@
     --archive-bg-color: #eceff1;
     --archive-text-color: #546e7a;
 
-    /* ÚJ VÁLTOZÓK a táblázat gombokhoz */
-    --table-btn-padding-y: 0.3rem; /* Függőleges padding */
-    --table-btn-padding-x: 0.6rem; /* Vízszintes padding */
-    --table-btn-font-size: 0.8em; /* Kicsit kisebb betűméret */
-    --table-btn-min-width: 210px; /* Minimum szélesség beállítása, hogy egyformábbak legyenek */
+    --table-btn-padding-y: 0.3rem;
+    --table-btn-padding-x: 0.5rem;
+    --table-btn-font-size: 0.8em;
+    --table-btn-min-width: 65px;
 }
 
-/* --- Global Styles --- */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -88,7 +85,6 @@ h1, h2, h3 {
     font-weight: 700;
 }
 
-/* --- Header Styles --- */
 header {
     background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
     color: white;
@@ -106,7 +102,6 @@ header h1 {
     text-shadow: 1px 1px 4px rgba(0,0,0,0.1);
 }
 
-/* --- Alert Messages --- */
 .alert {
     padding: 1rem;
     margin-bottom: 2rem;
@@ -128,7 +123,6 @@ header h1 {
     color: white;
 }
 
-/* --- Main Content Area (Card Style) --- */
 main {
     margin: 30px 0;
     background: var(--card-bg-color);
@@ -143,7 +137,6 @@ main {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Specific Style for Welcome Page Main Content --- */
 body.welcome-page main {
     background: none;
     box-shadow: none;
@@ -166,8 +159,6 @@ body.welcome-page .action-buttons {
     margin-top: 2rem;
 }
 
-
-/* --- Filter Section Styles --- */
 .filter-section {
     margin-bottom: 20px;
     padding: 15px;
@@ -201,8 +192,6 @@ body.welcome-page .action-buttons {
     outline: none;
 }
 
-
-/* --- Form Layout (for Create/Edit) --- */
 .form-layout {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -260,16 +249,12 @@ body.welcome-page .action-buttons {
     font-style: italic;
 }
 
-
-/* Make the action buttons span two columns in the grid */
 .form-layout .action-buttons {
     grid-column: span 2;
     text-align: center;
     margin-top: 1rem;
 }
 
-/* --- Button Styles --- */
-/* General button container/layout */
 .action-buttons {
     display: flex;
     justify-content: center;
@@ -279,7 +264,6 @@ body.welcome-page .action-buttons {
     margin-bottom: 20px;
 }
 
-/* Base button style - Applied to .btn class */
 .btn {
     display: inline-flex;
     align-items: center;
@@ -299,7 +283,6 @@ body.welcome-page .action-buttons {
     overflow: hidden;
 }
 
-/* Add a subtle ripple effect on click */
 .btn:active::after {
     content: "";
     position: absolute;
@@ -326,7 +309,6 @@ body.welcome-page .action-buttons {
     }
 }
 
-/* Hover and Active states for all buttons */
 .btn:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-medium);
@@ -337,7 +319,6 @@ body.welcome-page .action-buttons {
     box-shadow: var(--shadow-small);
 }
 
-/* Specific Button Colors */
 .btn-edit {
     background: var(--accent-color);
     color: white;
@@ -383,7 +364,6 @@ body.welcome-page .action-buttons {
     background: #e08e0b;
 }
 
-/* Archiválás gomb stílusa */
 .btn-archive {
     background: var(--archive-color);
     color: white;
@@ -393,7 +373,6 @@ body.welcome-page .action-buttons {
     background: #607d8b;
 }
 
-/* Visszaállítás gomb stílusa (lehet secondary gomb is) */
 .btn-secondary {
     background: var(--secondary-color);
     color: white;
@@ -402,8 +381,6 @@ body.welcome-page .action-buttons {
     background: #495765;
 }
 
-
-/* --- Table Styles --- */
 .styled-table {
     width: 100%;
     border-collapse: collapse;
@@ -423,7 +400,6 @@ body.welcome-page .action-buttons {
     font-weight: 700;
 }
 
-/* Style for sortable table headers */
 .styled-table th.sortable {
     cursor: pointer;
 }
@@ -440,12 +416,10 @@ body.welcome-page .action-buttons {
     text-decoration: underline;
 }
 
-/* Style for sort indicator arrows (▲ / ▼) */
 .styled-table th.sortable a span {
     font-size: 0.8em;
     color: rgba(255, 255, 255, 0.8);
 }
-
 
 .styled-table th,
 .styled-table td {
@@ -454,26 +428,22 @@ body.welcome-page .action-buttons {
     vertical-align: middle;
 }
 
-/* Alternating row colors for readability */
 .styled-table tbody tr:nth-of-type(even) {
     background-color: #f8f9fa;
 }
 
-/* Hover effect on table rows */
 .styled-table tbody tr:hover {
     background-color: #e9ecef;
     transform: scale(1.005);
     transition: background-color var(--transition-speed-normal), transform 0.1s ease-in-out;
 }
 
-/* Specific styling for warning rows (e.g., upcoming due date) */
 .styled-table tbody tr.due-warning {
     background-color: #ffeeba;
     color: #665d45;
     font-weight: 600;
 }
 
-/* --- Style for completed task rows --- */
 .styled-table tbody tr.completed-task {
     text-decoration: line-through;
     color: var(--completed-text-color);
@@ -482,7 +452,6 @@ body.welcome-page .action-buttons {
     transition: all var(--transition-speed-normal);
 }
 
-/* --- Style for overdue task rows --- */
 .styled-table tbody tr.overdue-task {
     background-color: var(--overdue-bg-color);
     color: var(--overdue-text-color);
@@ -491,7 +460,6 @@ body.welcome-page .action-buttons {
     transition: all var(--transition-speed-normal);
 }
 
-/* --- Style for archived task rows --- */
 .styled-table tbody tr.archived-task {
     background-color: var(--archive-bg-color);
     color: var(--archive-text-color);
@@ -577,75 +545,114 @@ body.welcome-page .action-buttons {
     text-decoration: underline;
 }
 
-
-/* Style for action buttons within table cells container */
 .styled-table td:last-child {
     display: flex;
     align-items: center;
-    gap: var(--table-button-gap); /* Használjuk a változót */
-    flex-wrap: wrap; /* Engedélyezzük a törést kisebb méretnél */
-    justify-content: flex-start; /* Balra rendezzük a gombokat alapértelmezetten */
+    gap: var(--table-button-gap);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-right: 15px;
+    min-width: 180px;
+    box-sizing: border-box;
 }
 
-/* Style for action buttons within table cells */
-.styled-table td .btn,
-.styled-table td form button {
-    padding: var(--table-btn-padding-y) var(--table-btn-padding-x); /* Használjuk a változókat */
-    font-size: var(--table-btn-font-size); /* Használjuk a változót */
-    border-radius: var(--border-radius-medium); /* Maradhat medium */
+.styled-table td:last-child > a.btn,
+.styled-table td:last-child > form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    flex-basis: auto;
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: auto;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.styled-table td:last-child form button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: var(--table-btn-padding-y) var(--table-btn-padding-x);
+    font-size: var(--table-btn-font-size);
+    border-radius: var(--border-radius-medium);
     box-shadow: none;
     transform: none;
-    transition: background-color var(--transition-speed-normal), opacity var(--transition-speed-normal), transform var(--transition-speed-normal); /* Hozzáadva a transform transition-hoz */
-    min-width: var(--table-btn-min-width); /* Minimum szélesség beállítása */
+    transition: background-color var(--transition-speed-normal), opacity var(--transition-speed-normal), transform var(--transition-speed-normal);
+    min-width: var(--table-btn-min-width);
     flex-shrink: 0;
-    text-align: center; /* Szöveg középre igazítása a gombokban */
-    white-space: nowrap; /* Megakadályozza a gomb szövegének törését */
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: none;
+    cursor: pointer;
 }
 
-/* Ensure delete button form is inline and doesn't add extra margin */
-/* Ezt a display: contents; már nem ideális flexbox containerben,
-   helyette a form flex item kell legyen */
-/* .styled-table td form { display: contents; } */
-
-/* Állítsuk a formokat flex item-ként */
-.styled-table td form {
-    display: flex; /* A form legyen flex container, ha több elem van benne (pl. hidden input) */
+.styled-table td:last-child a.btn-edit {
+    display: inline-flex;
     align-items: center;
-    margin: 0; /* Távolítsuk el az alapértelmezett margót a formról */
-    padding: 0; /* Távolítsuk el az alapértelmezett paddinget a formról */
-    /* A formnak is viselkednie kell flex item-ként a td:last-child-ben */
-    /* flex-basis: auto; flex-grow: 0; flex-shrink: 0; */ /* Vagy egyszerűen hagyjuk, hogy a gomb mérete határozza meg */
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+
+    padding: var(--table-btn-padding-y) var(--table-btn-padding-x);
+    font-size: var(--table-btn-font-size);
+    border-radius: var(--border-radius-medium);
+    box-shadow: none;
+    transform: none;
+    transition: all var(--transition-speed-normal);
+    min-width: var(--table-btn-min-width);
+    flex-shrink: 0;
+    text-align: center;
+    white-space: nowrap;
+    box-sizing: border-box;
+    width: auto;
+    height: 100%;
+    cursor: pointer;
+    background: var(--accent-color);
+    color: white;
 }
 
+.styled-table td .btn {
+    padding: var(--table-btn-padding-y) var(--table-btn-padding-x);
+    font-size: var(--table-btn-font-size);
+    min-width: var(--table-btn-min-width);
+    box-shadow: none;
+    transform: none;
+}
 
-/* Explicitly ensure hover styles are simple for table buttons */
-.styled-table td .btn-edit:hover {
+.styled-table td:last-child a.btn-edit:hover {
     background-color: #28a745;
     opacity: 0.9;
-    transform: scale(1.05); /* Kis effekt ráengedésnél */
+    transform: scale(1.05);
 }
 
-.styled-table td .btn-delete:hover,
-.styled-table td form button.btn-delete:hover {
+.styled-table td:last-child form button.btn-delete:hover {
     background-color: #c0392b;
     opacity: 0.9;
     animation: none;
     transform: scale(1.05);
 }
 
-.styled-table td .btn-archive:hover {
+.styled-table td:last-child form button.btn-archive:hover {
     background: #607d8b;
     opacity: 0.9;
     transform: scale(1.05);
 }
-.styled-table td .btn-secondary:hover {
+
+.styled-table td:last-child form button.btn-secondary:hover,
+.styled-table td:last-child a.btn-secondary:hover
+{
     background: #495765;
     opacity: 0.9;
     transform: scale(1.05);
 }
 
-
-/* --- Style a Feladat Részletek oldalhoz --- */
 .task-details {
     margin-top: 30px;
     padding: 30px;
@@ -677,7 +684,6 @@ body.welcome-page .action-buttons {
     color: var(--secondary-color);
 }
 
-/* Stílus a leírás <pre> tagjének */
 .detail-item pre {
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -691,7 +697,6 @@ body.welcome-page .action-buttons {
     font-size: inherit;
 }
 
-
 .details-actions {
     margin-top: 30px;
     border-top: 1px solid var(--bg-color);
@@ -701,8 +706,6 @@ body.welcome-page .action-buttons {
     flex-wrap: wrap;
 }
 
-
-/* --- Empty State Message --- */
 .no-tasks {
     text-align: center;
     font-size: 1.5rem;
@@ -717,8 +720,6 @@ body.welcome-page .action-buttons {
     line-height: 1.5;
 }
 
-
-/* --- Responsive Design --- */
 @media (max-width: 992px) {
     .container {
         padding: 0 15px;
@@ -739,54 +740,9 @@ body.welcome-page .action-buttons {
     }
 
     .form-layout {
-        gap: 1rem;
-        padding: 1.5rem;
-    }
-
-    .form-layout label {
-        padding-right: 10px;
-    }
-
-    .styled-table {
-        font-size: 0.9em;
-    }
-
-    .styled-table th, .styled-table td {
-        padding: 10px 12px;
-    }
-
-    .btn {
-        padding: 0.7rem 1.4rem;
-        font-size: 1rem;
-        gap: 6px;
-    }
-
-    /* Adjust table button size and gap */
-    .styled-table td .btn,
-    .styled-table td form button {
-        padding: var(--table-btn-padding-y) var(--table-btn-padding-x); /* Marad a változó */
-        font-size: var(--table-btn-font-size); /* Marad a változó */
-        gap: 4px; /* Kisebb rés kisebb méretnél */
-        min-width: 60px; /* Kisebb minimum szélesség */
-    }
-    .styled-table td:last-child {
-        gap: 6px; /* Rés a flex elemek között */
-    }
-
-    /* Responsive for Task Details */
-    .detail-item strong {
-        width: 120px;
-    }
-
-}
-
-
-@media (max-width: 768px) {
-    /* Stack form elements */
-    .form-layout {
         grid-template-columns: 1fr;
         gap: 1rem;
-        padding: 1rem;
+        padding: 1.5rem;
     }
 
     .form-layout label {
@@ -801,7 +757,6 @@ body.welcome-page .action-buttons {
         margin-left: 0;
     }
 
-    /* Action buttons span only one column when stacked */
     .form-layout .action-buttons {
         grid-column: span 1;
         flex-direction: column;
@@ -810,7 +765,6 @@ body.welcome-page .action-buttons {
         margin-top: 15px;
     }
 
-    /* Make stacked form buttons wider */
     .form-layout .action-buttons .btn {
         width: 90%;
         max-width: 300px;
@@ -818,18 +772,14 @@ body.welcome-page .action-buttons {
         padding: 0.8rem 1.5rem;
     }
 
-
-    /* Adjust header font size */
     header h1 {
         font-size: 2rem;
     }
 
-    /* Adjust main padding */
     main {
         padding: 20px;
     }
 
-    /* Adjust table font size */
     .styled-table {
         font-size: 0.85em;
     }
@@ -838,14 +788,12 @@ body.welcome-page .action-buttons {
         padding: 8px 10px;
     }
 
-    /* Stack action buttons below table if needed */
     .action-buttons {
         flex-direction: column;
         gap: 10px;
         align-items: center;
     }
 
-    /* Make general action buttons wider */
     .action-buttons .btn {
         width: 90%;
         max-width: 300px;
@@ -853,36 +801,33 @@ body.welcome-page .action-buttons {
         padding: 0.8rem 1.5rem;
     }
 
-    /* Adjust empty state text size */
     .no-tasks {
         font-size: 1.2rem;
         padding: 2rem;
     }
 
-    /* Responsive action buttons in table cells (stacking) */
     .styled-table td:last-child {
-        flex-direction: column; /* Oszlopba rendezzük a gombokat */
-        align-items: flex-start; /* Balra igazítjuk őket */
-        gap: 4px; /* Kisebb rés egymás alatt */
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        min-width: auto;
     }
 
-    /* Make the stacked buttons take full width within the cell (minus padding) */
-    .styled-table td .btn,
-    .styled-table td form button {
-        width: 100%; /* Teljes szélesség a cellában */
-        min-width: auto; /* Nincs minimum szélesség, a 100% a mérvadó */
-        text-align: center; /* Szöveg középre igazítása */
+    .styled-table td:last-child > a.btn,
+    .styled-table td:last-child > form {
+        width: 100%;
+        flex-basis: auto;
+        flex-shrink: 1;
     }
 
-    /* Adjust button padding slightly for stacked layout */
-    .styled-table td .btn,
-    .styled-table td form button {
+    .styled-table td:last-child a.btn,
+    .styled-table td:last-child form button {
+        width: 100%;
+        min-width: auto;
         padding: 0.4rem 0.6rem;
         font-size: 0.8em;
     }
 
-
-    /* Responsive for Task Details */
     .detail-item strong {
         display: block;
         width: auto;
@@ -932,13 +877,11 @@ body.welcome-page .action-buttons {
         padding: 0.7rem 1.2rem;
     }
 
-    /* Further adjust stacked table button padding/font size */
-    .styled-table td .btn,
-    .styled-table td form button {
+    .styled-table td:last-child a.btn,
+    .styled-table td:last-child form button {
         padding: 0.3rem 0.5rem;
         font-size: 0.75em;
     }
-
 
     .task-details {
         padding: 15px;
