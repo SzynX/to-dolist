@@ -28,7 +28,6 @@ public class Task {
 
     private boolean completed;
 
-    // Új prioritás mező hozzáadása
     @Enumerated(EnumType.STRING)
     private TaskPriority priority;
 
@@ -36,23 +35,42 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // A hátralévő napok számítása
+    // ÚJ mező az archiváláshoz, alapértelmezett értéke false
+    private boolean archived = false;
+
+
+    // Enum a feladat státuszokhoz
+    public enum TaskStatus {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED,
+        OVERDUE
+    }
+
+    // Enum a feladat prioritásokhoz
+    public enum TaskPriority {
+        LOW,
+        MEDIUM,
+        HIGH
+    }
+
+
+    // A hátralévő napok számítása (maradhat)
     public long getDaysUntilDueDate() {
         if (dueDate == null) {
-            return Long.MAX_VALUE; // Ha nincs határidő, ne jelenjen meg
+            return Long.MAX_VALUE;
         }
         return ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
     }
 
-    // Vizuális figyelmeztetés, ha a határidő közel van
+    // Vizuális figyelmeztetés (valószínűleg már nem lesz használva)
     public String getDueDateWarning() {
+        if (completed || archived) { // Ha kész vagy archiválva, nincs figyelmeztetés
+            return null;
+        }
         long daysLeft = getDaysUntilDueDate();
-        if (daysLeft > 1) {
-            return null; // Nincs közvetlen figyelmeztetés
-        } else if (daysLeft == 1) {
-            return "⏰ 1 nap van hátra!"; // 1 napos figyelmeztetés
-        } else if (daysLeft <= 0) {
-            return "⏰ Lejárt a határidő!"; // Lejárt a határidő
+        if (daysLeft == 1) {
+            return "⏰ 1 nap van hátra!";
         }
         return null;
     }

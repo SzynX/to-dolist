@@ -2,13 +2,13 @@ package org.example.to_dolist.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.to_dolist.domain.Task;
-import org.example.to_dolist.domain.TaskStatus;
-import org.example.to_dolist.domain.TaskPriority;
+import org.example.to_dolist.domain.Task.TaskStatus;
+import org.example.to_dolist.domain.Task.TaskPriority;
 import org.example.to_dolist.domain.User;
 import org.example.to_dolist.service.TaskService;
 import org.example.to_dolist.service.UserService;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity; // Ez most már nem kell a toggle végpontnál
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +27,7 @@ public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
 
+    // Fő feladatlista végpont - csak NEM archivált feladatokat listáz
     @GetMapping
     public String listTasks(
             Model model,
@@ -35,6 +36,7 @@ public class TaskController {
             @RequestParam(value = "userId", required = false) String userId
     ) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        // getAllTasks mostantól csak a NEM archiváltakat adja vissza
         model.addAttribute("tasks", taskService.getAllTasks(userId, sort));
 
         model.addAttribute("currentSortBy", sortBy);
@@ -43,17 +45,38 @@ public class TaskController {
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("currentUserId", userId);
 
+        model.addAttribute("isArchiveView", false); // Jelző a nézetnek, hogy nem archív
         return "tasks/tasks";
     }
 
-    // ÚJ VÉGPONT a feladat részletek megtekintéséhez
+    // ÚJ VÉGPONT az archivált feladatok listázásához
+    @GetMapping("/archive")
+    public String listArchivedTasks(
+            Model model,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @RequestParam(value = "userId", required = false) String userId
+    ) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortBy);
+        // getAllArchivedTasks lekéri az archiváltakat
+        model.addAttribute("tasks", taskService.getAllArchivedTasks(userId, sort));
+
+        model.addAttribute("currentSortBy", sortBy);
+        model.addAttribute("currentSortDirection", sortDirection);
+
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("currentUserId", userId);
+
+        model.addAttribute("isArchiveView", true); // Jelző a nézetnek, hogy ez az archív lista
+        return "tasks/archive"; // Az új HTML sablon neve az archív listához
+    }
+
+
     @GetMapping("/view/{id}")
     public String viewTask(@PathVariable UUID id, Model model) {
         Task task = taskService.getTaskById(id);
         model.addAttribute("task", task);
-        // Esetleg hozzáadhatod a felhasználók listáját is, ha a view oldalon kell pl. "Change Assignment" gomb
-        // model.addAttribute("users", userService.getAllUsers());
-        return "tasks/view-task"; // Az új HTML sablon neve
+        return "tasks/view-task";
     }
 
 
@@ -71,7 +94,7 @@ public class TaskController {
             @ModelAttribute("task") Task task,
             BindingResult bindingResult,
             @RequestParam(value = "userId", required = false) UUID userId,
-            @RequestParam("priority") TaskPriority priority,
+            @RequestParam("priority") Task.TaskPriority priority,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -91,11 +114,11 @@ public class TaskController {
             } else {
                 task.setUser(null);
             }
-            taskService.createTask(task);
+            taskService.createTask(task); // createTask beállítja archived=false
             redirectAttributes.addFlashAttribute("success", "Task created successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error creating task: " + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); // Loggoljuk a hibát a szerver oldalon
         }
         return "redirect:/tasks";
     }
@@ -115,7 +138,7 @@ public class TaskController {
             @ModelAttribute("task") Task task,
             BindingResult bindingResult,
             @RequestParam(value = "userId", required = false) UUID userId,
-            @RequestParam("priority") TaskPriority priority,
+            @RequestParam("priority") Task.TaskPriority priority,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -142,7 +165,7 @@ public class TaskController {
             redirectAttributes.addFlashAttribute("success", "Task updated successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error updating task: " + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); // Loggoljuk a hibát
         }
         return "redirect:/tasks";
     }
@@ -157,10 +180,46 @@ public class TaskController {
             redirectAttributes.addFlashAttribute("success", "Task deleted successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error deleting task: " + e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(); // Loggoljuk a hibát
         }
+        // Visszairányítás attól függően, hol voltunk (főlista vagy archív)
+        // Ezt a böngésző referrer fejléce alapján lehetne megállapítani, vagy egy rejtett mezővel
+        // Most maradjunk a főlistánál
         return "redirect:/tasks";
     }
+
+    // ÚJ VÉGPONT feladat archiválásához
+    @PostMapping("/archive/{id}")
+    public String archiveTask(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            taskService.archiveTask(id);
+            redirectAttributes.addFlashAttribute("success", "Task archived successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error archiving task: " + e.getMessage());
+            e.printStackTrace(); // Loggoljuk a hibát
+        }
+        return "redirect:/tasks"; // Archiválás után visszatérünk a főlistára
+    }
+
+    // ÚJ VÉGPONT archivált feladat visszaállításához
+    @PostMapping("/unarchive/{id}")
+    public String unarchiveTask(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            taskService.unarchiveTask(id);
+            redirectAttributes.addFlashAttribute("success", "Task unarchived successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error unarchiving task: " + e.getMessage());
+            e.printStackTrace(); // Loggoljuk a hibát
+        }
+        return "redirect:/tasks/archive"; // Visszaállítás után visszatérünk az archív listára
+    }
+
 
     @GetMapping("/due-warning")
     public String getTasksWithDueDateWarnings(Model model) {
@@ -169,14 +228,22 @@ public class TaskController {
         return "tasks/due-warning";
     }
 
+    // MÓDOSÍTOTT VÉGPONT: POST kérést fogad űrlapról, visszairányít
+    // Az @ResponseBody és ResponseEntity<?> eltávolítva, mivel nem AJAX válasz lesz
     @PostMapping("/toggle-completed/{id}")
-    @ResponseBody
-    public ResponseEntity<?> toggleCompleted(@PathVariable UUID id) {
+    public String toggleCompleted(
+            @PathVariable UUID id,
+            RedirectAttributes redirectAttributes
+    ) {
         try {
             taskService.toggleTaskCompleted(id);
-            return ResponseEntity.ok().build();
+            // Siker esetén is visszairányítunk, nincs külön success üzenet itt
+            // redirectAttributes.addFlashAttribute("success", "Task status updated successfully!");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error toggling task completed status: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error toggling task completed status: " + e.getMessage());
+            e.printStackTrace(); // Loggoljuk a hibát a szerver oldalon
         }
+        // Visszairányítunk a fő feladatlistára, hogy frissüljön az oldal
+        return "redirect:/tasks";
     }
 }

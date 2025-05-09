@@ -31,12 +31,14 @@
                 </select>
                 <input type="hidden" name="sortBy" th:value="${currentSortBy}" />
                 <input type="hidden" name="sortDirection" th:value="${currentSortDirection}" />
+                <input type="hidden" name="view" value="main" />
             </form>
         </div>
         <div class="action-buttons">
             <a href="/tasks/new" class="btn btn-create">➕ Create New Task</a>
             <a href="/users" class="btn btn-manage">👤 Manage Users</a>
             <a href="/tasks/due-warning" class="btn btn-warning">⚠️ Due Date Warnings</a>
+            <a href="/tasks/archive" class="btn btn-secondary">📦 View Archived Tasks</a>
         </div>
 
         <div class="task-list">
@@ -103,28 +105,35 @@
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}"
-                    th:class="'task-row status-' + ${task.status != null ? task.status.name() : 'UNKNOWN'} +
+                    th:class="'task-row status-' + (${task.archived ? 'ARCHIVED' : (task.status != null ? task.status.name() : 'UNKNOWN')}) +
                               ' priority-' + ${task.priority != null ? task.priority.name() : 'UNKNOWN'} +
-                              (${task.dueDate != null and task.dueDate.isBefore(T(java.time.LocalDate).now().plusDays(1)) and !task.completed ? ' due-warning' : ''}) +
+                               (${task.status != null and task.status.name() == 'OVERDUE' ? ' overdue-task' : ''}) +
                               (${task.completed ? ' completed-task' : ''})"
                     th:data-task-id="${task.id}">
                     <td th:text="${task.id}">1</td>
                     <td>
-                        <input
-                                type="checkbox"
-                                th:checked="${task.completed}"
-                                class="task-completed-checkbox"
-                        />
+                        <div th:unless="${task.archived}">
+                            <form th:action="@{/tasks/toggle-completed/{id}(id=${task.id})}" method="post" style="display:inline;">
+                                <input
+                                        type="checkbox"
+                                        th:checked="${task.completed}"
+                                        class="task-completed-checkbox"
+                                        onchange="this.form.submit()" /> </form>
+                        </div>
+                        <div th:if="${task.archived}">
+                            <input type="checkbox" th:checked="${task.completed}" disabled />
+                        </div>
                     </td>
                     <td>
                         <a th:href="@{/tasks/view/{id}(id=${task.id})}" th:text="${task.title}" class="task-title-link"></a>
                     </td>
                     <td th:text="${task.user != null ? task.user.name : 'Unassigned'}">N/A</td>
                     <td>
-                        <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
+                         <span th:switch="${task.status != null ? task.status.name() : 'UNKNOWN'}">
                             <span th:case="'PENDING'" class="status-PENDING">📌 Pending</span>
                             <span th:case="'IN_PROGRESS'" class="status-IN_PROGRESS">⏳ In Progress</span>
                             <span th:case="'COMPLETED'" class="status-COMPLETED">✅ Completed</span>
+                            <span th:case="'OVERDUE'" class="status-OVERDUE">🚨 Overdue</span>
                             <span th:case="'UNKNOWN'" class="status-UNKNOWN">❓ Unknown</span>
                         </span>
                     </td>
@@ -135,12 +144,19 @@
                         </span>
                     </td>
                     <td>
-                        <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
-                        <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline;"
-                              onsubmit="return confirm('Biztosan törölni szeretnéd ezt a feladatot?');">
-                            <input type="hidden" name="_method" value="DELETE"/>
-                            <button type="submit" class="btn-delete">🗑️ Delete</button>
-                        </form>
+                        <div th:unless="${task.archived}" style="display:flex; align-items:center; gap:var(--table-button-gap); flex-wrap: wrap;">
+                            <a th:href="@{/tasks/edit/{id}(id=${task.id})}" class="btn-edit">✏️ Edit</a>
+                            <form th:action="@{/tasks/archive/{id}(id=${task.id})}" method="post" style="display:inline-block;">
+                                <button type="submit" class="btn btn-archive">📦 Archive</button>
+                            </form>
+                            <form th:action="@{/tasks/delete/{id}(id=${task.id})}" method="post" style="display:inline-block;"
+                                  onsubmit="return confirm('Biztosan törölni szeretnéd ezt a feladatot?');">
+                                <input type="hidden" name="_method" value="DELETE"/>
+                                <button type="submit" class="btn-delete">🗑️ Delete</button>
+                            </form>
+                        </div>
+                        <div th:if="${task.archived}" style="display:flex; align-items:center; gap:var(--table-button-gap); flex-wrap: wrap;">
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -151,63 +167,6 @@
             </div>
         </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const checkboxes = document.querySelectorAll('.task-completed-checkbox');
-
-            checkboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
-                    const row = this.closest('.task-row');
-                    const taskId = row.dataset.taskId;
-                    const isCompleted = this.checked;
-
-                    fetch(`/tasks/toggle-completed/${taskId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            // Spring Security CSRF token handling (uncomment if needed)
-                            // 'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
-                        },
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                console.error('Failed to toggle task completed status');
-                                alert('Failed to update task status.');
-                                this.checked = !isCompleted; // Revert checkbox state on error
-                            } else {
-                                // Update row class visually on success
-                                if (isCompleted) {
-                                    row.classList.add('completed-task');
-                                    // Optional: Update Status text to '✅ Completed'
-                                    const statusCell = row.querySelector('td:nth-child(5) span');
-                                    if (statusCell) {
-                                        statusCell.className = 'status-COMPLETED';
-                                        statusCell.textContent = '✅ Completed';
-                                    }
-                                    // Remove due-warning class if completed
-                                    row.classList.remove('due-warning');
-
-                                } else {
-                                    row.classList.remove('completed-task');
-                                    const statusSpan = row.querySelector('td:nth-child(5) span');
-                                    if (statusSpan) {
-                                        // Simple revert to PENDING text/class - adjust if needed
-                                        statusSpan.className = 'status-PENDING';
-                                        statusSpan.textContent = '📌 Pending';
-                                    }
-                                }
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred while updating task status.');
-                            this.checked = !isCompleted;
-                        });
-                });
-            });
-        });
-    </script>
 
 </div>
 </body>

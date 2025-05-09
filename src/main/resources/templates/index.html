@@ -54,6 +54,7 @@
             box-shadow: var(--shadow-medium);
             border: var(--border-transparent);
             color: var(--light-text-color); /* Header text color */
+            text-align: center; /* Center inline/inline-block content */
         }
 
         .logo-container {
@@ -86,7 +87,7 @@
         .nav-links {
             display: flex;
             gap: 1.5rem;
-            justify-content: center;
+            justify-content: center; /* Center nav links */
             flex-wrap: wrap;
         }
 
@@ -165,27 +166,7 @@
             margin-right: auto;
         }
 
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
-            gap: 2rem;
-            max-width: 800px; /* Align with hero text */
-            margin: 0 auto;
-        }
-
-        .action-buttons .btn {
-            padding: 1.5rem; /* Larger buttons in main section */
-            flex-direction: column; /* Stack icon and text */
-            text-align: center;
-            /* Adjust min-width or remove if grid handles size */
-            min-width: auto;
-        }
-
-        .action-buttons .btn svg {
-            margin-bottom: 0.5rem; /* Space between icon and text when stacked */
-            width: 30px; /* Larger icons in main buttons */
-            height: 30px;
-        }
+        /* --- Removed the .action-buttons section from main --- */
 
         /* --- Footer Styles --- */
         footer {
@@ -224,7 +205,7 @@
             }
 
             .logo {
-                height: 275px; /* Smaller logo on mobile */
+                height: 200px; /* Smaller logo on mobile, adjusted from original 275px */
             }
 
             h1 {
@@ -252,23 +233,7 @@
                 margin-bottom: 2rem;
             }
 
-            .action-buttons {
-                grid-template-columns: 1fr; /* Stack action buttons */
-                gap: 1.5rem;
-            }
-
-            .action-buttons .btn {
-                padding: 1rem; /* Adjust main button padding */
-                flex-direction: row; /* Row layout for stacked buttons */
-                justify-content: center; /* Center content in row */
-                gap: 0.75rem;
-            }
-
-            .action-buttons .btn svg {
-                margin-bottom: 0; /* Remove bottom margin when in row */
-                width: 24px; /* Smaller icons */
-                height: 24px;
-            }
+            /* --- Removed action-buttons responsive styles as the section is removed --- */
 
             footer {
                 padding: 1.5rem;
@@ -299,13 +264,7 @@
                 margin-bottom: 1.5rem;
             }
 
-            .action-buttons {
-                gap: 1rem;
-            }
-
-            .action-buttons .btn {
-                padding: 0.8rem;
-            }
+            /* --- Removed action-buttons responsive styles as the section is removed --- */
 
             footer {
                 padding: 1rem;
@@ -335,21 +294,6 @@
             </div>
         </nav>
     </header>
-
-    <main>
-        <p class="hero-text">Welcome to the To-Do List Application!<br>Organize your tasks and manage users effortlessly with our intuitive platform.</p>
-
-        <div class="action-buttons">
-            <a href="/tasks" class="btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
-                View Tasks
-            </a>
-            <a href="/users" class="btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                View Users
-            </a>
-        </div>
-    </main>
 
     <footer>
         <p>&copy; 2025 To-Do List Application</p>
