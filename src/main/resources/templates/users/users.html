@@ -16,7 +16,11 @@
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
         <div class="action-buttons">
-            <a href="/users/new" class="btn btn-create">👤➕ Create New User</a> <a href="/tasks" class="btn btn-manage">📋 View Tasks</a> </div>
+            <a href="/" class="btn btn-home">🏠 Go to Home</a>
+            <a href="/users/new" class="btn btn-create">👤➕ Create New User</a>
+            <a href="/tasks" class="btn btn-manage">📋 View Tasks</a>
+
+        </div>
 
         <table class="styled-table" th:if="${users != null and not #lists.isEmpty(users)}"> <thead>
         <tr>

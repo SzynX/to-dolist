@@ -13,7 +13,7 @@
 
 	<groupId>com.example</groupId>
 	<artifactId>todo-list-app</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>1.2.2-SNAPSHOT</version>
 	<name>todo-list-app</name>
 	<description>Spring Boot To-Do List Application</description>
 
