@@ -1,6 +1,15 @@
 package org.example.to_dolist.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,7 +47,6 @@ public class Task {
     // ÚJ mező az archiváláshoz, alapértelmezett értéke false
     private boolean archived = false;
 
-
     // Enum a feladat státuszokhoz
     public enum TaskStatus {
         PENDING,
@@ -54,8 +62,7 @@ public class Task {
         HIGH
     }
 
-
-    // A hátralévő napok számítása (maradhat)
+    // A hátralévő napok számítása
     public long getDaysUntilDueDate() {
         if (dueDate == null) {
             return Long.MAX_VALUE;
@@ -63,9 +70,9 @@ public class Task {
         return ChronoUnit.DAYS.between(LocalDate.now(), dueDate);
     }
 
-    // Vizuális figyelmeztetés (valószínűleg már nem lesz használva)
+    // Vizuális figyelmeztetés
     public String getDueDateWarning() {
-        if (completed || archived) { // Ha kész vagy archiválva, nincs figyelmeztetés
+        if (completed || archived) {
             return null;
         }
         long daysLeft = getDaysUntilDueDate();

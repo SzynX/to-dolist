@@ -5,7 +5,14 @@ import org.example.to_dolist.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,37 +24,38 @@ public class TodoRESTController {
     @Autowired
     private TodoService todoService;
 
-    // GET: Get all todos
+
     @GetMapping
     public ResponseEntity<List<Todo>> getAllTodos() {
         List<Todo> todos = todoService.getAllTodos();
         return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
-    // GET: Get a single todo by ID
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable UUID id) {
         Todo todo = todoService.findById(id);
-        if (todo != null) {
-            return new ResponseEntity<>(todo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return todo != null
+                ? new ResponseEntity<>(todo, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    // POST: Create a new todo
+
     @PostMapping
     public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) {
         Todo createdTodo = todoService.save(todo);
         return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
     }
 
-    // PUT: Update an existing todo
+
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable UUID id, @RequestBody Todo todo) {
+    public ResponseEntity<Todo> updateTodo(
+            @PathVariable UUID id,
+            @RequestBody Todo todo
+    ) {
         Todo existingTodo = todoService.findById(id);
         if (existingTodo != null) {
-            todo.setId(id);  // Set the ID to ensure the correct todo is updated
+            todo.setId(id);
             Todo updatedTodo = todoService.edit(todo);
             return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
         } else {
@@ -55,10 +63,11 @@ public class TodoRESTController {
         }
     }
 
-    // DELETE: Delete a todo by ID
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTodoById(@PathVariable UUID id) {
-        if (todoService.findById(id) != null) {
+        Todo todo = todoService.findById(id);
+        if (todo != null) {
             todoService.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

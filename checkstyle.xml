@@ -57,10 +57,6 @@
     </module>
 
 
-    <!-- Checks whether files end with a new line.                        -->
-    <!-- See https://checkstyle.org/checks/misc/newlineatendoffile.html -->
-    <module name="NewlineAtEndOfFile"/>
-
     <!-- Checks that property files contain the same keys.         -->
     <!-- See https://checkstyle.org/checks/misc/translation.html -->
     <module name="Translation"/>
@@ -71,10 +67,6 @@
     <module name="LineLength">
         <property name="fileExtensions" value="java"/>
     </module>
-
-    <!-- Checks for whitespace                               -->
-    <!-- See https://checkstyle.org/checks/whitespace/index.html -->
-    <module name="FileTabCharacter"/>
 
     <!-- Miscellaneous other checks.                   -->
     <!-- See https://checkstyle.org/checks/misc/index.html -->

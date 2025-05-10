@@ -33,7 +33,8 @@ public class TodoService {
         if (optionalTodo.isPresent()) {
             return optionalTodo.get();
         } else {
-            throw new NoSuchEntityException("There was no todo found for this id: " + id);
+            throw new NoSuchEntityException(
+                    "There was no todo found for this id: " + id);
         }
     }
 

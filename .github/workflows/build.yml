@@ -22,9 +22,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # 3. Maven build + tesztek, Checkstyle kihagyva
+      # 3. Maven build + tesztek, Checkstyle hozzáadva most már
       - name: Build and Test with Checkstyle skip
-        run: mvn -B verify -Dcheckstyle.skip=true
+        run: mvn -B verify
 
       # 4. In-memory mock adatbázis létrehozása (ArrayList alapú)
       - name: Mock DB Setup (ArrayList-based)
@@ -57,11 +57,11 @@ jobs:
           EOT
           echo "Mock adatbázis osztály létrehozva."
 
-      # 5. Tesztek futtatása újra, Checkstyle kihagyva
+      # 5. Tesztek futtatása újra, Checkstyle most már hozzáadva
       - name: Run tests with mock DB
-        run: mvn test -Dcheckstyle.skip=true
+        run: mvn test
 
-      # 6. Jacoco lefedettségi jelentés feltöltése (mindig, sikeres vagy sikertelen build esetén is)
+      # 6. Jacoco lefedettségi jelentés feltöltése
       - name: Upload Jacoco Test Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,7 +69,7 @@ jobs:
           name: jacoco-report
           path: target/site/jacoco
 
-      # 7. Buildelt JAR fájl feltöltése (mindig, sikeres vagy sikertelen build esetén is)
+      # 7. Buildelt JAR fájl feltöltése
       - name: Upload Built Jar Artifact
         if: always()
         uses: actions/upload-artifact@v4

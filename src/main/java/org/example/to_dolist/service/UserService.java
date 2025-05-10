@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.to_dolist.domain.User;
 import org.example.to_dolist.exception.UserNotFoundException;
 import org.example.to_dolist.repository.UserRepository;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
@@ -17,14 +16,13 @@ public class UserService {
 
     public User getUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + id));
+                .orElseThrow(() ->
+                        new UserNotFoundException(
+                                "User not found with ID: " + id));
     }
 
     public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        // Lazy inicializáció aktiválása (ha szükséges a tasks lista eléréséhez itt vagy a nézetben)
-        // users.forEach(user -> Hibernate.initialize(user.getTasks())); // Ezt a sort csak akkor kell, ha users.getTasks() hívás történik itt vagy a nézetben
-        return users;
+        return userRepository.findAll();
     }
 
     public User save(User user) {
@@ -33,7 +31,8 @@ public class UserService {
 
     public void deleteById(UUID id) {
         if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("Cannot delete. User not found with ID: " + id);
+            throw new UserNotFoundException(
+                    "Cannot delete. User not found with ID: " + id);
         }
         userRepository.deleteById(id);
     }

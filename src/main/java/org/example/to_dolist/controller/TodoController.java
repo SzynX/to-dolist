@@ -5,7 +5,11 @@ import org.example.to_dolist.service.TodoService;
 import org.example.to_dolist.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,10 +21,12 @@ public class TodoController {
     private final TodoService todoService;
     private final UserService userService;
 
-    // ✅ Konstruktoros injekció
-    public TodoController(TodoService todoService, UserService userService) {
-        this.todoService = todoService;
-        this.userService = userService;
+    // Konstruktoros injekció – paraméternevek nem rejtik el a mezőket
+    public TodoController(
+            TodoService todoServiceParam,
+            UserService userServiceParam) {
+        this.todoService = todoServiceParam;
+        this.userService = userServiceParam;
     }
 
     @GetMapping("/list")

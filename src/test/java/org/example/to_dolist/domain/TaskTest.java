@@ -15,12 +15,15 @@ class TaskTest {
 
     @BeforeEach
     void setUp() {
+        // Dinamikusan állítjuk be a dueDate-t, hogy mindig a mai nap utáni legyen
+        LocalDate futureDueDate = LocalDate.now().plusDays(1);
+
         user = new User(UUID.randomUUID(), "John Doe", LocalDate.of(1990, 1, 1), null);
         task = Task.builder()
                 .id(UUID.randomUUID())
                 .title("Test Task")
                 .description("Task Description")
-                .dueDate(LocalDate.of(2025, 5, 10))
+                .dueDate(futureDueDate)
                 .status(Task.TaskStatus.PENDING)
                 .completed(false)
                 .priority(Task.TaskPriority.HIGH)
@@ -49,14 +52,13 @@ class TaskTest {
 
     @Test
     void testGetDueDateWarning() {
-        // Beállítjuk a dueDate-t, hogy 1 napra legyen a mai naptól
+        // Beállítjuk a dueDate-t, hogy 1 nap hátra legyen
         task.setDueDate(LocalDate.now().plusDays(1));
 
-        // Ha nem fejeződött be és nincs archiválva, akkor kell figyelmeztetés
+        // Ha nem fejeződött be és nincs archiválva, figyelmeztetésnek meg kell jelennie
         String warning = task.getDueDateWarning();
-        assertEquals("⏰ 1 nap van hátra!", warning);  // A figyelmeztetésnek meg kell jelennie
+        assertEquals("⏰ 1 nap van hátra!", warning);
     }
-
 
     @Test
     void testSetCompleted() {
@@ -72,10 +74,8 @@ class TaskTest {
 
     @Test
     void testBidirectionalRelationship() {
-        // Ellenőrizzük, hogy a Task user-jának a User-nak kell lennie
         User newUser = new User(UUID.randomUUID(), "Jane Doe", LocalDate.of(1992, 2, 2), null);
         task.setUser(newUser);
-
         assertEquals(newUser, task.getUser());
     }
 
@@ -95,13 +95,13 @@ class TaskTest {
     void testDueDateWarningCompletedTask() {
         task.setCompleted(true);
         String warning = task.getDueDateWarning();
-        assertNull(warning);  // Mivel a task completed, nem lesz figyelmeztetés
+        assertNull(warning);  // Ha a feladat kész, nincs figyelmeztetés
     }
 
     @Test
     void testDueDateWarningArchivedTask() {
         task.setArchived(true);
         String warning = task.getDueDateWarning();
-        assertNull(warning);  // Mivel a task archived, nem lesz figyelmeztetés
+        assertNull(warning);  // Ha a feladat archivált, nincs figyelmeztetés
     }
 }
