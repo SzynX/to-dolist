@@ -7,13 +7,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- Variables --- */
+
         :root {
-            --primary-color: #6366f1; /* Indigo */
-            --secondary-color: #3b82f6; /* Blue */
-            --accent-color: #10b981; /* Emerald */
-            --text-color: #1e293b; /* Dark Slate */
-            --light-text-color: #e2e8f0; /* Light Slate for contrast on dark/transparent */
+            --primary-color: #6366f1;
+            --secondary-color: #3b82f6;
+            --accent-color: #10b981;
+            --text-color: #1e293b;
+            --light-text-color: #e2e8f0;
             --bg-gradient: linear-gradient(135deg, #6366f1 0%, #3b82f6 50%, #10b981 100%);
             --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
             --shadow-medium: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -21,15 +21,15 @@
             --border-transparent: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* --- Global Styles --- */
+
         body {
             min-height: 100vh;
             margin: 0;
-            font-family: 'Roboto', system-ui, sans-serif; /* Use Roboto */
+            font-family: 'Roboto', system-ui, sans-serif;
             background: var(--bg-gradient);
-            background-size: 400% 400%; /* Enable gradient animation */
+            background-size: 400% 400%;
             animation: gradientFlow 15s ease infinite;
-            color: var(--text-color); /* Default text color */
+            color: var(--text-color);
             line-height: 1.6;
             display: flex;
             flex-direction: column;
@@ -39,22 +39,21 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
-            /* backdrop-filter: blur(10px); */ /* Optional: can make text harder to read, removed for clarity */
-            min-height: 100vh; /* Ensure container pushes footer down */
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* --- Header Styles --- */
+
         header {
-            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+            background: rgba(255, 255, 255, 0.1);
             padding: 2rem;
             border-radius: 20px;
             margin-bottom: 3rem;
             box-shadow: var(--shadow-medium);
             border: var(--border-transparent);
-            color: var(--light-text-color); /* Header text color */
-            text-align: center; /* Center inline/inline-block content */
+            color: var(--light-text-color);
+            text-align: center;
         }
 
         .logo-container {
@@ -62,24 +61,24 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 2rem;
-            flex-wrap: wrap; /* Allow logo/title to wrap */
-            justify-content: center; /* Center on small screens */
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .logo {
-            height: 275px; /* Adjusted logo size to be more reasonable */
+            height: 275px;
             filter: drop-shadow(var(--shadow-light));
             transition: transform 0.3s ease;
         }
 
         .logo:hover {
-            transform: scale(1.1); /* Subtle scale on hover */
-            /* transform: rotate(15deg) scale(1.1); */ /* More dramatic effect if preferred */
+            transform: scale(1.1);
+
         }
 
         header h1 {
             font-size: 2.5rem;
-            color: var(--light-text-color); /* Header title color */
+            color: var(--light-text-color);
             margin: 0;
             text-shadow: var(--shadow-light);
         }
@@ -87,30 +86,30 @@
         .nav-links {
             display: flex;
             gap: 1.5rem;
-            justify-content: center; /* Center nav links */
+            justify-content: center;
             flex-wrap: wrap;
         }
 
-        /* --- Button Styles --- */
+
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
             padding: 1rem 2rem;
-            border-radius: 50px; /* Pill shape */
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.15); /* More transparent white */
-            backdrop-filter: blur(5px); /* Apply blur effect */
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
             border: var(--border-transparent);
-            color: var(--light-text-color); /* Button text color */
+            color: var(--light-text-color);
             position: relative;
             overflow: hidden;
-            z-index: 1; /* Ensure button is above background */
+            z-index: 1;
         }
 
-        /* Subtle shine effect on hover */
+
         .btn::before {
             content: '';
             position: absolute;
@@ -118,15 +117,15 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); /* More prominent shine */
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: 0.5s;
-            z-index: -1; /* Behind the button content */
+            z-index: -1;
         }
 
         .btn:hover {
-            background: rgba(255, 255, 255, 0.25); /* Less transparent on hover */
+            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.15); /* More prominent shadow on hover */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
         }
 
         .btn:hover::before {
@@ -137,41 +136,41 @@
             width: 24px;
             height: 24px;
             transition: transform 0.3s ease;
-            stroke: var(--light-text-color); /* Ensure icon color matches text */
+            stroke: var(--light-text-color);
         }
 
         .btn:hover svg {
-            /* transform: rotate(15deg) scale(1.1); */ /* Optional dramatic icon effect */
-            transform: scale(1.1); /* Subtle icon scale */
+
+            transform: scale(1.1);
         }
 
-        /* --- Main Content Styles --- */
+
         main {
             text-align: center;
             margin: 4rem 0;
-            flex-grow: 1; /* Allow main content area to grow */
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Center content vertically */
+            justify-content: center;
         }
 
         .hero-text {
             font-size: 1.75rem;
-            color: var(--text-color); /* --- FIXED: Changed text color to dark --- */
+            color: var(--text-color);
             margin-bottom: 3rem;
             line-height: 1.6;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle text shadow */
-            max-width: 800px; /* Limit text width for readability */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
 
-        /* --- Removed the .action-buttons section from main --- */
 
-        /* --- Footer Styles --- */
+
+
         footer {
             background: rgba(255, 255, 255, 0.1);
-            color: var(--light-text-color); /* Footer text color */
+            color: var(--light-text-color);
             text-align: center;
             padding: 2rem;
             border-radius: 20px;
@@ -180,17 +179,17 @@
             border: var(--border-transparent);
         }
 
-        /* --- Animations --- */
+
         @keyframes gradientFlow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* --- Responsive Adjustments --- */
+
         @media (max-width: 768px) {
             .container {
-                padding: 1rem; /* Less padding on smaller screens */
+                padding: 1rem;
             }
 
             header {
@@ -199,13 +198,13 @@
             }
 
             .logo-container {
-                flex-direction: column; /* Stack logo and title */
+                flex-direction: column;
                 gap: 0.5rem;
                 margin-bottom: 1.5rem;
             }
 
             .logo {
-                height: 200px; /* Smaller logo on mobile, adjusted from original 275px */
+                height: 200px;
             }
 
             h1 {
@@ -213,11 +212,11 @@
             }
 
             .nav-links {
-                gap: 1rem; /* Smaller gap between nav buttons */
+                gap: 1rem;
             }
 
             .btn {
-                padding: 0.8rem 1.5rem; /* Smaller padding for nav buttons */
+                padding: 0.8rem 1.5rem;
                 font-size: 0.9rem;
                 gap: 0.5rem;
             }
@@ -225,7 +224,7 @@
 
             main {
                 margin: 2rem 0;
-                justify-content: flex-start; /* Don't force vertical centering if content is long */
+                justify-content: flex-start;
             }
 
             .hero-text {
@@ -233,7 +232,7 @@
                 margin-bottom: 2rem;
             }
 
-            /* --- Removed action-buttons responsive styles as the section is removed --- */
+
 
             footer {
                 padding: 1.5rem;
@@ -264,7 +263,7 @@
                 margin-bottom: 1.5rem;
             }
 
-            /* --- Removed action-buttons responsive styles as the section is removed --- */
+
 
             footer {
                 padding: 1rem;

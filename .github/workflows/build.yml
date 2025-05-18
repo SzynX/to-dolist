@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
 
       # 3. Maven build + tesztek, Checkstyle hozzáadva most már
-      - name: Build and Test with Checkstyle skip
+      - name: Build and Test with Checkstyle
         run: mvn -B verify
 
       # 4. In-memory mock adatbázis létrehozása (ArrayList alapú)

@@ -15,7 +15,6 @@ class TaskTest {
 
     @BeforeEach
     void setUp() {
-        // Dinamikusan állítjuk be a dueDate-t, hogy mindig a mai nap utáni legyen
         LocalDate futureDueDate = LocalDate.now().plusDays(1);
 
         user = new User(UUID.randomUUID(), "John Doe", LocalDate.of(1990, 1, 1), null);
@@ -52,10 +51,8 @@ class TaskTest {
 
     @Test
     void testGetDueDateWarning() {
-        // Beállítjuk a dueDate-t, hogy 1 nap hátra legyen
         task.setDueDate(LocalDate.now().plusDays(1));
 
-        // Ha nem fejeződött be és nincs archiválva, figyelmeztetésnek meg kell jelennie
         String warning = task.getDueDateWarning();
         assertEquals("⏰ 1 nap van hátra!", warning);
     }

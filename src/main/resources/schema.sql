@@ -13,7 +13,7 @@ CREATE TABLE task (
                       description VARCHAR(1000),
                       due_date DATE NOT NULL,
                       status VARCHAR(20) NOT NULL,
-                      completed BOOLEAN NOTattoos NULL, -- Már benne volt
+                      completed BOOLEAN NOTattoos NULL,
     -- ÚJ: Hozzáadva az archived oszlop
                       archived BOOLEAN DEFAULT FALSE NOT NULL, -- Fontos a DEFAULT FALSE
                       user_id UUID,

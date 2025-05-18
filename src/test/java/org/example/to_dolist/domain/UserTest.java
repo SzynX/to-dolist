@@ -16,41 +16,35 @@ class UserTest {
     @BeforeEach
     void setUp() {
         user = new User();
-        task = mock(Task.class); // Task osztály mockolása
+        task = mock(Task.class);
     }
 
     @Test
     void testAddTask() {
-        // Ellenőrizzük, hogy a task hozzáadásakor a lista növekszik
         int initialSize = user.getTasks().size();
 
         user.addTask(task);
 
         assertEquals(initialSize + 1, user.getTasks().size(), "A task hozzáadása után nőnie kell a lista méretének.");
-        verify(task).setUser(user); // Ellenőrizzük, hogy a task user-t is beállítja
+        verify(task).setUser(user);
     }
 
     @Test
     void testRemoveTask() {
-        // Hozzáadunk egy task-ot, majd eltávolítjuk
-        user.addTask(task);
-        int initialSize = user.getTasks().size();
+        user.addTask(task); // Add the task first
+        int initialSize = user.getTasks().size(); // Get the size after adding
 
         user.removeTask(task);
 
         assertEquals(initialSize - 1, user.getTasks().size(), "A task eltávolítása után csökkennie kell a lista méretének.");
-        verify(task).setUser(null); // Ellenőrizzük, hogy a task user-t null-ra állítja
+        verify(task).setUser(null);
     }
 
     @Test
     void testAddTaskBidirectionalRelationship() {
-        // Hozzunk létre egy valós Task objektumot
+
         Task task = new Task();
-
-        // A feladatot hozzáadjuk a User-hez
         user.addTask(task);
-
-        // Ellenőrizzük, hogy a Task user mezője a User objektumot tartalmazza
         assertEquals(user, task.getUser(), "A task user-jának a User-nak kell lennie.");
     }
 
@@ -65,7 +59,6 @@ class UserTest {
 
     @Test
     void testUserAttributes() {
-        // Teszteljük a User objektum attribútumait
         UUID userId = UUID.randomUUID();
         String userName = "John Doe";
         LocalDate userDateOfBirth = LocalDate.of(1990, 1, 1);

@@ -36,7 +36,7 @@ public class UserServiceTest {
         testUser.setName("testName"); // ✅ Javítva setUsername -> setName
     }
 
-    // ===================== getUserById =====================
+
 
     @Test
     void getUserById_ShouldReturnUser_WhenUserExists() {
@@ -59,13 +59,12 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findById(testUserId);
     }
 
-    // ===================== getAllUsers =====================
 
     @Test
     void getAllUsers_ShouldReturnListOfUsers() {
         User anotherUser = new User();
         anotherUser.setId(UUID.randomUUID());
-        anotherUser.setName("anotherName"); // ✅ Javítva setUsername -> setName
+        anotherUser.setName("anotherName");
 
         List<User> userList = List.of(testUser, anotherUser);
 
@@ -77,7 +76,7 @@ public class UserServiceTest {
         verify(userRepository, times(1)).findAll();
     }
 
-    // ===================== save =====================
+
 
     @Test
     void save_ShouldReturnSavedUser() {
@@ -89,7 +88,7 @@ public class UserServiceTest {
         verify(userRepository, times(1)).save(testUser);
     }
 
-    // ===================== deleteById =====================
+
 
     @Test
     void deleteById_ShouldCallDelete_WhenUserExists() {

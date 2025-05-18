@@ -21,7 +21,7 @@ public class TodoController {
     private final TodoService todoService;
     private final UserService userService;
 
-    // Konstruktoros injekció – paraméternevek nem rejtik el a mezőket
+
     public TodoController(
             TodoService todoServiceParam,
             UserService userServiceParam) {

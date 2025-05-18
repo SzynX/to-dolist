@@ -13,12 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HomeControllerTest {
 
     @Autowired
-    private MockMvc mockMvc; // Injectáljuk a MockMvc objektumot
+    private MockMvc mockMvc;
 
     @Test
     void indexPageShouldReturnIndexView() throws Exception {
-        mockMvc.perform(get("/")) // GET kérést szimulálunk a "/" útvonalra
-                .andExpect(status().isOk()) // Ellenőrizzük, hogy a HTTP státusz 200 OK
-                .andExpect(view().name("index")); // Ellenőrizzük, hogy a visszaadott nézet neve "index"
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("index"));
     }
 }

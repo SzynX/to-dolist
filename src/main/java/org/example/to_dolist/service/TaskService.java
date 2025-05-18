@@ -157,7 +157,7 @@ public class TaskService {
     }
 
     /**
-     * Archivált feladat visszaállítása (unarchive).
+     * Archivált feladat visszaállítása. (unarchive).
      */
     @Transactional
     public void unarchiveTask(UUID id) {

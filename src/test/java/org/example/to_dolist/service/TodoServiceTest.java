@@ -41,7 +41,7 @@ public class TodoServiceTest {
                 .build();
     }
 
-    // ===================== getAllTodos =====================
+
 
     @Test
     void getAllTodos_ShouldReturnAllTodos() {
@@ -61,7 +61,7 @@ public class TodoServiceTest {
         verify(todoRepository, times(1)).findAll();
     }
 
-    // ===================== save =====================
+
 
     @Test
     void save_ShouldSaveAndReturnTodo() {
@@ -73,7 +73,7 @@ public class TodoServiceTest {
         verify(todoRepository, times(1)).save(testTodo);
     }
 
-    // ===================== edit =====================
+
 
     @Test
     void edit_ShouldUpdateAndReturnTodo() {
@@ -93,7 +93,7 @@ public class TodoServiceTest {
         verify(todoRepository, times(1)).save(updatedTodo);
     }
 
-    // ===================== findById =====================
+
 
     @Test
     void findById_ShouldReturnTodo_WhenExists() {
@@ -116,7 +116,7 @@ public class TodoServiceTest {
         verify(todoRepository, times(1)).findById(testTodoId);
     }
 
-    // ===================== deleteById =====================
+
 
     @Test
     void deleteById_ShouldCallRepositoryDelete() {

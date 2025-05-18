@@ -44,7 +44,6 @@ public class User {
     @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 
-    // Bidirekcionális kapcsolat kezelése
     public void addTask(Task task) {
         tasks.add(task);
         task.setUser(this);
